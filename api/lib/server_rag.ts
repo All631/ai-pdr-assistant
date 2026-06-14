@@ -11,7 +11,6 @@ export interface ChunkWithEmbedding extends Chunk {
   embedding?: number[];
 }
 
-// Chunks builder splits the PDR text by paragraphs and points while preserving section headers
 export function buildChunks(rawText: string): Chunk[] {
   const lines = rawText.split('\n');
   const chunks: Chunk[] = [];
@@ -23,7 +22,6 @@ export function buildChunks(rawText: string): Chunk[] {
     line = line.trim();
     if (!line) continue;
 
-    // Detect section heading
     if (line.startsWith("РОЗДІЛ")) {
       if (currentBlock.length > 0) {
         chunkCounter++;
@@ -38,7 +36,6 @@ export function buildChunks(rawText: string): Chunk[] {
       continue;
     }
 
-    // Numbered subpoints like "1.1.", "12.3.", etc. trigger a new chunk
     const isNumberedRule = /^\d+\.\d+\./.test(line);
 
     if (isNumberedRule) {
@@ -68,14 +65,13 @@ export function buildChunks(rawText: string): Chunk[] {
   return chunks;
 }
 
-// Simple fallback keyword metric to rank chunks when OpenAI API key is missing
 function computeKeywordOverlaps(query: string, chunk: Chunk): number {
   const normalize = (text: string) => {
     return text
       .toLowerCase()
       .replace(/[.,\/#!$%\^&\*;:{}=\-_`~()?" Ukraine]/g, " ")
       .split(/\s+/)
-      .filter(w => w.length > 2); // only consider significant words
+      .filter(w => w.length > 2);
   };
 
   const queryWords = normalize(query);
@@ -85,7 +81,6 @@ function computeKeywordOverlaps(query: string, chunk: Chunk): number {
 
   let matches = 0;
   for (const qWord of queryWords) {
-    // Simple stem matching: if word matches or is contained in content
     if (contentWords.some(cWord => cWord.includes(qWord) || qWord.includes(cWord))) {
       matches++;
     }
@@ -94,7 +89,6 @@ function computeKeywordOverlaps(query: string, chunk: Chunk): number {
   return matches / queryWords.length;
 }
 
-// Cosine similarity for real vector embeddings
 function cosineSimilarity(vecA: number[], vecB: number[]): number {
   let dotProduct = 0;
   let normA = 0;
@@ -121,9 +115,6 @@ export class PdrVectorDb {
     this.loadOrBuildDb();
   }
 
-  /**
-   * Loads chunks from file, and falls back to building chunks from raw text
-   */
   private loadOrBuildDb() {
     try {
       if (fs.existsSync(this.dbPath)) {
@@ -157,23 +148,19 @@ export class PdrVectorDb {
     }
   }
 
-  /**
-   * Compute embeddings using Google Gemini API for chunks that are missing them
-   */
   public async ensureEmbeddingsInitialized(apiKey: string | undefined): Promise<void> {
     if (!apiKey) {
       console.log("[RAG VectorDB] Missing API key, skipping Vector calculations. Using fallback keyword matching.");
       return;
     }
 
-    // Find chunks that do not have embeddings yet
     const missingEmbeddings = this.chunks.filter(c => !c.embedding || c.embedding.length === 0);
     if (missingEmbeddings.length === 0) {
       return;
     }
 
     console.log(`[RAG VectorDB] Computing embeddings for ${missingEmbeddings.length} missing chunks utilizing Google Gemini API...`);
-    
+
     try {
       const { GoogleGenAI } = await import("@google/genai");
       const ai = new GoogleGenAI({
@@ -185,7 +172,6 @@ export class PdrVectorDb {
         }
       });
 
-      // Fetch in batches to stay within quota limits and handle cleanly
       const batchSize = 10;
       for (let i = 0; i < missingEmbeddings.length; i += batchSize) {
         const batch = missingEmbeddings.slice(i, i + batchSize);
@@ -217,7 +203,6 @@ export class PdrVectorDb {
         });
       }
 
-      // Vercel serverless has a read-only filesystem — skip cache write there
       if (process.env.VERCEL !== "1") {
         fs.writeFileSync(this.dbPath, JSON.stringify(this.chunks, null, 2), "utf-8");
         console.log(`[RAG VectorDB] Computed & saved ${missingEmbeddings.length} embeddings to cache!`);
@@ -229,9 +214,6 @@ export class PdrVectorDb {
     }
   }
 
-  /**
-   * Search for top K relevant chunks using the specified query text
-   */
   public async search(query: string, apiKey: string | undefined, limit: number = 3): Promise<Chunk[]> {
     if (this.chunks.length === 0) {
       this.loadOrBuildDb();
@@ -263,13 +245,11 @@ export class PdrVectorDb {
           throw new Error("Failed to yield embedding for user query.");
         }
 
-        // Rank by cosine similarity
         const scoredChunks = this.chunks.map(chunk => {
           const score = chunk.embedding ? cosineSimilarity(queryVector, chunk.embedding) : 0;
           return { chunk, score };
         });
 
-        // Sort descending
         scoredChunks.sort((a, b) => b.score - a.score);
         console.log(`[RAG VectorDB] Top similarity scores:`, scoredChunks.slice(0, 3).map(s => `${s.chunk.id} (Score: ${s.score.toFixed(3)})`));
 
@@ -280,14 +260,12 @@ export class PdrVectorDb {
     }
 
     console.log(`[RAG VectorDB] Performing search via local keyword stem overlap for: "${query}"`);
-    // Fallback: simple token intersection rating
     const scoredChunks = this.chunks.map(chunk => {
       const score = computeKeywordOverlaps(query, chunk);
       return { chunk, score };
     });
 
     scoredChunks.sort((a, b) => b.score - a.score);
-    // filter chunks that have 0 score if there are other matching ones
     const bestMatches = scoredChunks.filter(s => s.score > 0);
     const results = bestMatches.length > 0 ? bestMatches : scoredChunks;
 
@@ -295,5 +273,4 @@ export class PdrVectorDb {
   }
 }
 
-// Single instance
 export const pdrVectorDbInstance = new PdrVectorDb();
