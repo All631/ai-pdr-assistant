@@ -42,11 +42,11 @@ export default function Navbar({ activeTab, setActiveTab, streak, totalCorrect, 
               <span className="font-display text-lg font-bold tracking-tight text-slate-900 sm:text-xl">
                 AI ПДР Помічник
               </span>
-              <span className="inline-flex items-center rounded-full bg-blue-50 px-1.5 py-0.5 text-3xs font-medium text-blue-700 ring-1 ring-blue-700/10 ring-inset">
+              <span className="hidden sm:inline-block items-center rounded-full bg-blue-50 px-1.5 py-0.5 text-3xs font-medium text-blue-700 ring-1 ring-blue-700/10 ring-inset">
                 MVP
               </span>
             </div>
-            <p className="text-4xs font-medium tracking-wider text-slate-400 uppercase">Освітня Платформа</p>
+            <p className="hidden sm:block text-4xs font-medium tracking-wider text-slate-400 uppercase">Освітня Платформа</p>
           </div>
         </div>
 

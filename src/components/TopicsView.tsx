@@ -204,7 +204,9 @@ export default function TopicsView({ onMarkTopicCompleted, completedTopicIds }: 
       {/* Filter and Search Bar */}
       <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between" id="filter-search-bar">
         {/* Category list */}
-        <div className="flex flex-wrap gap-1.5 custom-scrollbar overflow-x-auto pb-1 sm:pb-0">
+        <div className="relative w-full sm:w-auto">
+          <p className="mb-1.5 text-4xs font-medium text-slate-400 sm:hidden">гортай →</p>
+          <div className="flex flex-nowrap gap-1.5 custom-scrollbar overflow-x-auto pb-3 sm:flex-wrap sm:pb-0">
           {categories.map((cat) => (
             <button
               key={cat}
@@ -218,6 +220,7 @@ export default function TopicsView({ onMarkTopicCompleted, completedTopicIds }: 
               {cat}
             </button>
           ))}
+          </div>
         </div>
 
         {/* Search */}

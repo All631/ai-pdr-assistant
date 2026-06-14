@@ -459,7 +459,7 @@ export default function TestingView({ onRegisterTestCompleted, setActiveTab, boo
                   )}
 
                   {/* Highlight core statistics table fields */}
-                  <div className="mt-6 grid grid-cols-3 gap-2 rounded-2xl bg-black/10 p-4 text-xs font-bold font-mono">
+                  <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 rounded-2xl bg-black/10 p-4 text-xs font-bold font-mono">
                     <div>
                       <p className="text-white/75 text-3xs uppercase">Вірно</p>
                       <p className="mt-1 text-lg" id="result-correct-count">{correctCount}</p>

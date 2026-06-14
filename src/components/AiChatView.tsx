@@ -16,6 +16,17 @@ const SUGGESTED_PROMPTS = [
   "Яка черговість сигналів регулювальника перед знаками?"
 ];
 
+const aiChatAdaptiveStyles = `
+<style>
+@media (max-width: 768px) {
+  #ai-chat-view-section {
+    height: 60vh;
+    min-height: 400px;
+  }
+}
+</style>
+`;
+
 // Simple formatter to parse **bold** and \n into beautiful HTML elements safely
 function formatMessageContent(text: string) {
   const parts = text.split(/(\*\*.*?\*\*)/g);
@@ -162,7 +173,9 @@ export default function AiChatView() {
   };
 
   return (
-    <div className="py-2 flex flex-col h-[calc(100vh-12rem)] min-h-[500px]" id="ai-chat-view-section">
+    <>
+      <div dangerouslySetInnerHTML={{ __html: aiChatAdaptiveStyles }} aria-hidden="true" />
+    <div className="py-2 flex flex-col h-[calc(100vh-12rem)] min-h-[400px]" id="ai-chat-view-section">
       {/* Search and stats bar */}
       <div className="mb-6 flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-5 shrink-0">
         <div>
@@ -319,5 +332,6 @@ export default function AiChatView() {
         * Відповіді AI базуються на офіційному кодексі ПДР України. Завжди перевіряйте критичні дорожні ситуації.
       </p>
     </div>
+    </>
   );
 }

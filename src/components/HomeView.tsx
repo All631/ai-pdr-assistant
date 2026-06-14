@@ -22,6 +22,23 @@ import {
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 
+const adaptiveStyles = `
+<style>
+@media (max-width: 768px) {
+  .hero-buttons { flex-direction: column; width: 100%; }
+  .hero-buttons button { width: 100%; margin-bottom: 12px; }
+  .stats-grid { grid-template-columns: 1fr; }
+  .stats-card { padding: 16px; text-align: center; }
+  .stats-value { font-size: 28px; }
+  .features-grid { grid-template-columns: 1fr; }
+  .bookmark-item { flex-direction: column; align-items: flex-start; }
+  .hero-title { font-size: 20px; }
+  .container { padding: 0 16px; }
+  .question-card { padding: 16px; }
+}
+</style>
+`;
+
 interface HomeViewProps {
   setActiveTab: (tab: AppTab) => void;
   streak: number;
@@ -90,7 +107,7 @@ export default function HomeView({ setActiveTab, streak, bookmarkedQuestionIds, 
           correctAnswerIndex: qJson.correctAnswer,
           explanation: qJson.explanation,
           image: qJson.image || null,
-          topicTitle: QUESTION_TOPIC_MAP_LOCAL[qJson.id] || 'Тренажер'
+          topicTitle: QUESTION_TOPIC_MAP_LOCAL[qJson.id] || 'Тестування'
         });
         return;
       }
@@ -156,7 +173,9 @@ export default function HomeView({ setActiveTab, streak, bookmarkedQuestionIds, 
   };
 
   return (
-    <div className="space-y-12 py-6 sm:py-8" id="home-view-container">
+    <>
+      <div dangerouslySetInnerHTML={{ __html: adaptiveStyles }} aria-hidden="true" />
+    <div className="space-y-12 py-6 sm:py-8 container" id="home-view-container">
       {/* Hero Section */}
       <section className="relative overflow-hidden rounded-3xl bg-slate-900 px-6 py-12 text-white sm:px-12 sm:py-16 lg:px-16 lg:py-20 shadow-xl shadow-slate-900/10">
         {/* Glow decoration */}
@@ -177,7 +196,7 @@ export default function HomeView({ setActiveTab, streak, bookmarkedQuestionIds, 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="mt-6 font-display text-3xl font-extrabold tracking-tight sm:text-5xl lg:text-6xl text-white"
+            className="mt-6 font-display text-3xl font-extrabold tracking-tight sm:text-5xl lg:text-6xl text-white hero-title"
           >
             Класичні ПДР України у <span className="text-blue-400">сучасному</span> форматі
           </motion.h1>
@@ -195,7 +214,7 @@ export default function HomeView({ setActiveTab, streak, bookmarkedQuestionIds, 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
-            className="mt-10 flex flex-col justify-center gap-4 sm:flex-row"
+            className="mt-10 flex flex-col justify-center gap-4 sm:flex-row hero-buttons"
           >
             <button
               onClick={() => setActiveTab('learning')}
@@ -218,11 +237,11 @@ export default function HomeView({ setActiveTab, streak, bookmarkedQuestionIds, 
       </section>
 
       {/* Quick Dashboard Info */}
-      <section className="grid grid-cols-1 gap-4 sm:grid-cols-3" id="mini-fines-rules-grid">
+      <section className="grid grid-cols-1 gap-4 sm:grid-cols-3 stats-grid" id="mini-fines-rules-grid">
         {miniStats.map((stat, idx) => (
-          <div key={idx} className="rounded-2xl border border-slate-100 bg-white p-5 shadow-sm hover:shadow-md transition-shadow">
+          <div key={idx} className="rounded-2xl border border-slate-100 bg-white p-5 shadow-sm hover:shadow-md transition-shadow stats-card">
             <p className="text-xs font-semibold text-slate-500">{stat.title}</p>
-            <p className="mt-2 text-2xl font-mono font-bold tracking-tight text-slate-900">{stat.value}</p>
+            <p className="mt-2 text-2xl font-mono font-bold tracking-tight text-slate-900 stats-value">{stat.value}</p>
             <p className="mt-1 text-3xs text-slate-400 font-medium">{stat.desc}</p>
           </div>
         ))}
@@ -233,7 +252,7 @@ export default function HomeView({ setActiveTab, streak, bookmarkedQuestionIds, 
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-2">
           <div>
             <h2 className="font-display text-2xl font-bold tracking-tight text-slate-900">Ефективні інструменти MVP курсу</h2>
-            <p className="mt-1 text-sm text-slate-500">Ми пропонуємо всесторонній підхід для успішного засвоєння правил з першого разу.</p>
+            <p className="mt-1 text-sm text-slate-500">Ми пропонуємо комплексний підхід для успішного засвоєння правил з першого разу.</p>
           </div>
           <div className="flex items-center space-x-1.5 text-xs font-bold text-blue-600 bg-blue-50 px-3 py-1.5 rounded-lg w-max">
             <Clock className="h-4 w-4" />
@@ -241,7 +260,7 @@ export default function HomeView({ setActiveTab, streak, bookmarkedQuestionIds, 
           </div>
         </div>
 
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-3 features-grid">
           {features.map((feat, idx) => {
             const Icon = feat.icon;
             return (
@@ -274,7 +293,7 @@ export default function HomeView({ setActiveTab, streak, bookmarkedQuestionIds, 
       </section>
 
       {/* Interactive Question of the Day Widget */}
-      <section className="rounded-2xl border border-blue-100 bg-gradient-to-b from-blue-50/50 to-white/70 p-6 sm:p-8" id="question-of-day">
+      <section className="rounded-2xl border border-blue-100 bg-gradient-to-b from-blue-50/50 to-white/70 p-6 sm:p-8 question-card" id="question-of-day">
         <div className="flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
           <div className="space-y-4 md:max-w-[55%]">
             <div className="inline-flex items-center space-x-1.5 rounded-full bg-blue-100/80 px-3 py-1 text-xs font-bold text-blue-800">
@@ -394,7 +413,7 @@ export default function HomeView({ setActiveTab, streak, bookmarkedQuestionIds, 
             <div className="max-w-md mx-auto space-y-1">
               <p className="text-sm font-semibold text-slate-700">Список обраного порожній</p>
               <p className="text-xs leading-relaxed text-slate-400">
-                Коли ви проходите тренувальні тести в розділі <strong>Тренажер</strong>, ви можете натискати на іконку-закладку 🔖 у кутку будь-якого питання, щоб зберегти його сюди для легкого повторення.
+                Коли ви проходите тренувальні тести в розділі <strong>Тестування</strong>, ви можете натискати на іконку-закладку 🔖 у кутку будь-якого питання, щоб зберегти його сюди для легкого повторення.
               </p>
             </div>
           </div>
@@ -410,7 +429,7 @@ export default function HomeView({ setActiveTab, streak, bookmarkedQuestionIds, 
                   {/* Top Bar / Header click target */}
                   <div 
                     onClick={() => toggleExpandQuestion(q.id)}
-                    className="flex items-center justify-between p-4.5 hover:bg-slate-5/50 cursor-pointer transition-colors select-none"
+                    className="flex items-center justify-between p-4.5 hover:bg-slate-5/50 cursor-pointer transition-colors select-none bookmark-item"
                   >
                     <div className="space-y-1 flex-1 pr-4">
                       <div className="flex items-center space-x-2">
@@ -533,5 +552,6 @@ export default function HomeView({ setActiveTab, streak, bookmarkedQuestionIds, 
         </div>
       </section>
     </div>
+    </>
   );
 }
