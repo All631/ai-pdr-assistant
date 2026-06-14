@@ -5,7 +5,7 @@ import app from "./api/lib/app.js";
 
 dotenv.config();
 
-const PORT = 3000;
+const PORT = 3001;
 
 async function startServer() {
   if (process.env.NODE_ENV !== "production") {
@@ -24,12 +24,10 @@ async function startServer() {
   }
 
   app.listen(PORT, "0.0.0.0", () => {
-    console.log(`Server running on http://localhost:${PORT}`);
+    console.log(`Local dev server: http://localhost:${PORT}`);
   });
 }
 
 if (process.env.VERCEL !== "1") {
   startServer();
 }
-
-export default app;
