@@ -3,7 +3,7 @@ import { PdrTopic, Question } from '../types';
 import { TOPICS, QUESTIONS } from '../data/pdrData';
 import { 
   BookOpen, 
-  TrafficLight,
+  TrafficCone,
   Signpost,
   Route,
   Sparkles, 
@@ -20,6 +20,7 @@ import {
   ChevronRight,
   RefreshCw
 } from 'lucide-react';
+import { StopSign, GiveWaySign, SpeedLimitSign } from '../signs';
 import { motion, AnimatePresence } from 'motion/react';
 
 const topicsAdaptiveStyles = `
@@ -38,7 +39,7 @@ function getTopicCardIcon(topic: PdrTopic) {
     case 'general':
       return <BookOpen className="topic-card-icon w-8 h-8 text-blue-500 mr-3 shrink-0" />;
     case 'regulation':
-      return <TrafficLight className="topic-card-icon w-8 h-8 text-red-500 mr-3 shrink-0" />;
+      return <TrafficCone className="topic-card-icon w-8 h-8 text-red-500 mr-3 shrink-0" />;
     case 'signs':
       return <Signpost className="topic-card-icon w-8 h-8 text-green-500 mr-3 shrink-0" />;
     case 'intersections':
@@ -321,6 +322,15 @@ export default function TopicsView({ onMarkTopicCompleted, completedTopicIds }: 
                   <p className="mt-1 line-clamp-2 text-xs leading-normal text-slate-500">
                     {topic.shortDescription}
                   </p>
+
+                  {topic.id === 'signs' && (
+                    <div className="flex gap-3 mt-4 flex-wrap">
+                      <StopSign size={40} />
+                      <GiveWaySign size={40} />
+                      <SpeedLimitSign limit={50} size={40} />
+                      <SpeedLimitSign limit={20} size={40} />
+                    </div>
+                  )}
 
                   <div className="mt-4 flex items-center justify-between border-t border-slate-100/70 pt-2.5 text-4xs font-bold text-slate-400 uppercase tracking-widest font-mono">
                     <span>{topic.questionsCount} питань</span>
