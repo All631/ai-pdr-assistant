@@ -3,5 +3,13 @@ export {
   StopSign,
   GiveWaySign,
   NoEntrySign,
+  NoOvertakingSign,
+  NoLeftTurnSign,
+  NoUTurnSign,
+  WarningSign,
+  MainRoadSign,
+  PedestrianCrossingSign,
+  ChildrenSign,
+  ParkingSign,
   PublicTrafficSign,
 } from './TrafficSignIcons';
