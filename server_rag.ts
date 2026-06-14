@@ -108,10 +108,14 @@ function cosineSimilarity(vecA: number[], vecB: number[]): number {
   return dotProduct / (Math.sqrt(normA) * Math.sqrt(normB));
 }
 
+const PDR_DATA_DIR = path.join(process.cwd(), "src", "data");
+const PDR_EMBEDDINGS_PATH = path.join(PDR_DATA_DIR, "pdr_embeddings.json");
+const PDR_UKRAINE_PATH = path.join(PDR_DATA_DIR, "pdr_ukraine.txt");
+
 export class PdrVectorDb {
   private chunks: ChunkWithEmbedding[] = [];
-  private dbPath = path.join(process.cwd(), "src", "data", "pdr_embeddings.json");
-  private rawPdrPath = path.join(process.cwd(), "src", "data", "pdr_ukraine.txt");
+  private dbPath = PDR_EMBEDDINGS_PATH;
+  private rawPdrPath = PDR_UKRAINE_PATH;
 
   constructor() {
     this.loadOrBuildDb();
@@ -213,9 +217,13 @@ export class PdrVectorDb {
         });
       }
 
-      // Save database cache
-      fs.writeFileSync(this.dbPath, JSON.stringify(this.chunks, null, 2), "utf-8");
-      console.log(`[RAG VectorDB] Computed & saved ${missingEmbeddings.length} embeddings to cache!`);
+      // Vercel serverless has a read-only filesystem — skip cache write there
+      if (process.env.VERCEL !== "1") {
+        fs.writeFileSync(this.dbPath, JSON.stringify(this.chunks, null, 2), "utf-8");
+        console.log(`[RAG VectorDB] Computed & saved ${missingEmbeddings.length} embeddings to cache!`);
+      } else {
+        console.log(`[RAG VectorDB] Computed ${missingEmbeddings.length} embeddings (cache write skipped on Vercel).`);
+      }
     } catch (err) {
       console.error("[RAG VectorDB] Error computing embeddings:", err);
     }

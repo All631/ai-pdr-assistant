@@ -1,7 +1,6 @@
 import express from "express";
 import path from "path";
 import dotenv from "dotenv";
-import { createServer as createViteServer } from "vite";
 import { GoogleGenAI } from "@google/genai";
 import { pdrVectorDbInstance } from "./server_rag";
 
@@ -142,8 +141,9 @@ _Для повного доступу до розумного AI-помічни�
 });
 
 async function startServer() {
-  // Vite middleware for development
+  // Vite middleware for development only (dynamic import avoids bundling vite into Vercel serverless)
   if (process.env.NODE_ENV !== "production") {
+    const { createServer: createViteServer } = await import("vite");
     const vite = await createViteServer({
       server: { middlewareMode: true },
       appType: "spa",

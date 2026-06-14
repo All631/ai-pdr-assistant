@@ -107,11 +107,19 @@ export default function AiChatView() {
         body: JSON.stringify({ messages: conversationHistory })
       });
 
+      const contentType = res.headers.get('content-type') || '';
+      if (!contentType.includes('application/json')) {
+        const text = await res.text();
+        throw new Error(
+          `Сервер повернув некоректну відповідь (не JSON). Перевірте змінну GEMINI_API_KEY у Vercel Environment Variables та логи Functions у панелі Vercel. Деталі: ${text.slice(0, 120)}`
+        );
+      }
+
       const data = await res.json();
 
       if (!res.ok) {
-        if (data.error === 'OPENAI_KEY_MISSING' || !process.env.OPENAI_API_KEY) {
-          setApiKeyError(data.message || "Для роботи системи тестування AI необхідно додати OPENAI_API_KEY.");
+        if (data.error === 'API_ERROR' || data.error === 'GEMINI_KEY_MISSING') {
+          setApiKeyError(data.message || "Для роботи AI-помічника необхідно налаштувати GEMINI_API_KEY у Vercel Environment Variables.");
         } else {
           throw new Error(data.message || "Внутрішня помилка сервера при запиті");
         }
@@ -129,7 +137,12 @@ export default function AiChatView() {
       setMessages(prev => [...prev, assistantMsg]);
     } catch (err: any) {
       console.error(err);
-      setApiKeyError(err.message || "Сталася неочікувана помилка зв'язку з сервером.");
+      const message = err.message || "Сталася неочікувана помилка зв'язку з сервером.";
+      if (message.includes('GEMINI_API_KEY') || message.includes('JSON')) {
+        setApiKeyError(message);
+      } else {
+        setApiKeyError(`${message} Перевірте GEMINI_API_KEY у Vercel Environment Variables та логи Functions.`);
+      }
     } finally {
       setIsLoading(false);
     }
@@ -157,7 +170,7 @@ export default function AiChatView() {
             <span className="inline-flex items-center rounded-full bg-indigo-50 px-2.5 py-0.5 text-xs font-semibold text-indigo-700">
               AI Модель нового покоління
             </span>
-            <span className="text-xs text-slate-400 font-mono">OpenAI gpt-4o-mini</span>
+            <span className="text-xs text-slate-400 font-mono">Google Gemini</span>
           </div>
           <h1 className="mt-2 font-display text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">Консультація з AI-помічником</h1>
           <p className="mt-1.5 text-sm text-slate-500">
@@ -243,7 +256,7 @@ export default function AiChatView() {
                 </p>
               </div>
               <div className="text-3xs font-mono text-slate-500 bg-white p-2.5 rounded-lg border border-rose-100 uppercase tracking-wide">
-                Змінна: OPENAI_API_KEY у файлі .env
+                Змінна: GEMINI_API_KEY у Vercel Environment Variables (або .env локально)
               </div>
             </div>
           )}
