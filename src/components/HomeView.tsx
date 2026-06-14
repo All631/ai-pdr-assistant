@@ -10,6 +10,7 @@ import {
   ShieldAlert, 
   TrendingUp, 
   CheckCircle2, 
+  CheckCircle,
   XCircle, 
   Timer,
   AlertCircle,
@@ -134,9 +135,24 @@ export default function HomeView({ setActiveTab, streak, bookmarkedQuestionIds, 
 
   // Stats for highlighting
   const miniStats = [
-    { title: 'Дозволена швидкість в місті', value: '50 км/год', desc: 'п. 12.4 ПДР України' },
-    { title: 'Максимальний поріг аварійності', value: '+20 км/год', desc: 'Адмінкодекс штрафів' },
-    { title: 'Ліміт помилок на іспиті', value: 'До 2-х помилок', desc: 'З 20 можливих питань' },
+    {
+      title: 'Дозволена швидкість в місті',
+      value: '50 км/год',
+      desc: 'п. 12.4 ПДР України',
+      icon: <Gauge className="w-6 h-6 text-orange-500 shrink-0" />,
+    },
+    {
+      title: 'Максимальний поріг аварійності',
+      value: '+20 км/год',
+      desc: 'Адмінкодекс штрафів',
+      icon: <AlertCircle className="w-6 h-6 text-red-500 shrink-0" />,
+    },
+    {
+      title: 'Ліміт помилок на іспиті',
+      value: 'До 2-х помилок',
+      desc: 'З 20 можливих питань',
+      icon: <CheckCircle className="w-6 h-6 text-green-500 shrink-0" />,
+    },
   ];
 
   const features = [
@@ -240,7 +256,10 @@ export default function HomeView({ setActiveTab, streak, bookmarkedQuestionIds, 
       <section className="grid grid-cols-1 gap-4 sm:grid-cols-3 stats-grid" id="mini-fines-rules-grid">
         {miniStats.map((stat, idx) => (
           <div key={idx} className="rounded-2xl border border-slate-100 bg-white p-5 shadow-sm hover:shadow-md transition-shadow stats-card">
-            <p className="text-xs font-semibold text-slate-500">{stat.title}</p>
+            <div className="flex items-center gap-2">
+              {stat.icon}
+              <p className="text-xs font-semibold text-slate-500">{stat.title}</p>
+            </div>
             <p className="mt-2 text-2xl font-mono font-bold tracking-tight text-slate-900 stats-value">{stat.value}</p>
             <p className="mt-1 text-3xs text-slate-400 font-medium">{stat.desc}</p>
           </div>

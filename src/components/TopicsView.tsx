@@ -3,6 +3,9 @@ import { PdrTopic, Question } from '../types';
 import { TOPICS, QUESTIONS } from '../data/pdrData';
 import { 
   BookOpen, 
+  TrafficLight,
+  Signpost,
+  Route,
   Sparkles, 
   AlertTriangle, 
   CreditCard, 
@@ -18,6 +21,35 @@ import {
   RefreshCw
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
+
+const topicsAdaptiveStyles = `
+<style>
+@media (max-width: 768px) {
+  .topic-card-icon {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+}
+</style>
+`;
+
+function getTopicCardIcon(topic: PdrTopic) {
+  switch (topic.id) {
+    case 'general':
+      return <BookOpen className="topic-card-icon w-8 h-8 text-blue-500 mr-3 shrink-0" />;
+    case 'regulation':
+      return <TrafficLight className="topic-card-icon w-8 h-8 text-red-500 mr-3 shrink-0" />;
+    case 'signs':
+      return <Signpost className="topic-card-icon w-8 h-8 text-green-500 mr-3 shrink-0" />;
+    case 'intersections':
+      return <Route className="topic-card-icon w-8 h-8 text-purple-500 mr-3 shrink-0" />;
+    default:
+      if (topic.warnings && topic.warnings.length > 0) {
+        return <AlertTriangle className="topic-card-icon w-8 h-8 text-amber-500 mr-3 shrink-0" />;
+      }
+      return <ShieldCheck className="topic-card-icon w-8 h-8 text-slate-500 mr-3 shrink-0" />;
+  }
+}
 
 interface TopicsViewProps {
   onMarkTopicCompleted: (topicId: string) => void;
@@ -192,6 +224,8 @@ export default function TopicsView({ onMarkTopicCompleted, completedTopicIds }: 
   const isCompleted = completedTopicIds.includes(selectedTopic.id);
 
   return (
+    <>
+      <div dangerouslySetInnerHTML={{ __html: topicsAdaptiveStyles }} aria-hidden="true" />
     <div className="py-2" id="topics-view-container">
       {/* Header */}
       <div className="mb-8">
@@ -266,6 +300,9 @@ export default function TopicsView({ onMarkTopicCompleted, completedTopicIds }: 
                       : 'border-slate-100 bg-white hover:border-slate-200 hover:shadow-md'
                   }`}
                 >
+                  <div className="flex flex-row items-center">
+                    {getTopicCardIcon(topic)}
+                    <div className="flex-1 min-w-0">
                   <div className="flex items-start justify-between gap-2">
                     <span className="inline-flex items-center rounded-lg bg-slate-100 px-2 py-0.5 text-4xs font-bold text-slate-600 uppercase">
                       Рзд {topic.number} • {topic.category}
@@ -290,6 +327,8 @@ export default function TopicsView({ onMarkTopicCompleted, completedTopicIds }: 
                     <span className="flex items-center text-blue-600 group-hover:translate-x-0.5 transition-transform">
                       Вивчати <ChevronRight className="ml-0.5 h-3 w-3" />
                     </span>
+                  </div>
+                    </div>
                   </div>
                 </div>
               );
@@ -516,5 +555,6 @@ export default function TopicsView({ onMarkTopicCompleted, completedTopicIds }: 
         </div>
       </div>
     </div>
+    </>
   );
 }

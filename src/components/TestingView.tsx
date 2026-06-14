@@ -32,6 +32,17 @@ interface JSONQuestion {
 
 const questionsPool = rawQuestions as JSONQuestion[];
 
+function getAnswerStatusIcon(status: 'correct' | 'incorrect' | 'unknown') {
+  switch (status) {
+    case 'correct':
+      return <CheckCircle2 className="w-5 h-5 text-green-500 ml-2 shrink-0" />;
+    case 'incorrect':
+      return <XCircle className="w-5 h-5 text-red-500 ml-2 shrink-0" />;
+    case 'unknown':
+      return <HelpCircle className="w-5 h-5 text-gray-400 ml-2 shrink-0" />;
+  }
+}
+
 const QUESTION_TOPIC_MAP: Record<string, { topicId: string, topicTitle: string }> = {
   'q-1': { topicId: 'learning-speed', topicTitle: 'Швидкісний режим' },
   'q-2': { topicId: 'learning-intersections', topicTitle: 'Проїзд перехресть' },
@@ -639,20 +650,27 @@ export default function TestingView({ onRegisterTestCompleted, setActiveTab, boo
                             return (
                               <div 
                                 key={ansIdx}
-                                className={`rounded-xl border p-3 text-xs flex items-start gap-2.5 ${optStyle}`}
+                                className={`rounded-xl border p-3 text-xs flex items-center justify-between gap-2.5 ${optStyle}`}
                               >
-                                <span className="font-mono text-xs font-semibold">
-                                  {['A', 'B', 'C', 'D'][ansIdx]}.
-                                </span>
-                                <div>
-                                  <p>{answer}</p>
-                                  {isCorrectAns && (
-                                    <span className="text-5xs uppercase tracking-wider text-emerald-600 font-bold block mt-0.5">Відповідно до ПДР</span>
-                                  )}
-                                  {isUserSelection && !isRight && (
-                                    <span className="text-5xs uppercase tracking-wider text-rose-600 font-bold block mt-0.5">Ваш вибір</span>
-                                  )}
+                                <div className="flex items-start gap-2.5 min-w-0">
+                                  <span className="font-mono text-xs font-semibold shrink-0">
+                                    {['A', 'B', 'C', 'D'][ansIdx]}.
+                                  </span>
+                                  <div>
+                                    <p>{answer}</p>
+                                    {isCorrectAns && (
+                                      <span className="text-5xs uppercase tracking-wider text-emerald-600 font-bold block mt-0.5">Відповідно до ПДР</span>
+                                    )}
+                                    {isUserSelection && !isRight && (
+                                      <span className="text-5xs uppercase tracking-wider text-rose-600 font-bold block mt-0.5">Ваш вибір</span>
+                                    )}
+                                  </div>
                                 </div>
+                                {isCorrectAns
+                                  ? getAnswerStatusIcon('correct')
+                                  : isUserSelection && !isCorrectAns
+                                    ? getAnswerStatusIcon('incorrect')
+                                    : getAnswerStatusIcon('unknown')}
                               </div>
                             );
                           })}
@@ -733,19 +751,16 @@ export default function TestingView({ onRegisterTestCompleted, setActiveTab, boo
                       onClick={() => handleSelectAnswer(qId, ansIndex)}
                       className={`w-full rounded-2xl border p-4.5 text-left text-xs transition-all flex items-center justify-between ${optionStyle} ${!hasSelected ? 'cursor-pointer' : 'cursor-default'}`}
                     >
-                      <div className="flex items-start gap-3">
+                      <div className="flex items-start gap-3 min-w-0 flex-1">
                         <span className="font-mono text-xs font-extrabold text-blue-600 self-center shrink-0">
                           {['A', 'B', 'C', 'D'][ansIndex]}.
                         </span>
                         <p className="leading-relaxed text-xs">{answer}</p>
                       </div>
 
-                      {hasSelected && isCorrect && (
-                        <CheckCircle2 className="h-5 w-5 text-emerald-600 shrink-0 ml-2" />
-                      )}
-                      {hasSelected && isSelected && !isCorrect && (
-                        <XCircle className="h-5 w-5 text-rose-600 shrink-0 ml-2" />
-                      )}
+                      {!hasSelected && getAnswerStatusIcon('unknown')}
+                      {hasSelected && isCorrect && getAnswerStatusIcon('correct')}
+                      {hasSelected && isSelected && !isCorrect && getAnswerStatusIcon('incorrect')}
                     </button>
                   );
                 })}

@@ -217,13 +217,15 @@ export default function AiChatView() {
                   id={`chat-bubble-${msg.id}`}
                 >
                   {/* Avatar wrapper */}
-                  <div className={`h-8 w-8 rounded-xl flex items-center justify-center shrink-0 shadow-3xs ${
-                    isAssistant 
-                      ? 'bg-gradient-to-tr from-blue-600 to-indigo-600 text-white' 
-                      : 'bg-slate-100 text-slate-600'
-                  }`}>
-                    {isAssistant ? <Bot className="h-4.5 w-4.5" /> : <User className="h-4.5 w-4.5" />}
-                  </div>
+                  {isAssistant ? (
+                    <div className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center shrink-0">
+                      <Bot className="w-4 h-4 text-green-600" />
+                    </div>
+                  ) : (
+                    <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center shrink-0">
+                      <User className="w-4 h-4 text-blue-600" />
+                    </div>
+                  )}
 
                   {/* Message bubble */}
                   <div className="space-y-1">
@@ -244,8 +246,8 @@ export default function AiChatView() {
           {/* AI Thinking Animation */}
           {isLoading && (
             <div className="flex gap-3 max-w-[80%] mr-auto" id="ai-loading-indicator">
-              <div className="h-8 w-8 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-600 text-white flex items-center justify-center animate-pulse shadow-3xs">
-                <Bot className="h-4.5 w-4.5" />
+              <div className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center animate-pulse shrink-0">
+                <Bot className="w-4 h-4 text-green-600" />
               </div>
               <div className="bg-slate-50 border border-slate-100/50 rounded-2xl rounded-tl-none px-4 py-3 flex items-center gap-2">
                 <span className="h-2 w-2 rounded-full bg-blue-600 animate-bounce delay-75" />
