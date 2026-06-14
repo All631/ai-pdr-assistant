@@ -20,7 +20,7 @@ import {
   ChevronRight,
   RefreshCw
 } from 'lucide-react';
-import { StopSign, GiveWaySign, SpeedLimitSign } from '../signs';
+import { StopSign, GiveWaySign, SpeedLimitSign } from './signs';
 import { motion, AnimatePresence } from 'motion/react';
 
 const topicsAdaptiveStyles = `

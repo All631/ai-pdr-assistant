@@ -770,12 +770,13 @@ export default function TrafficLessons({ standalone = false }: { standalone?: bo
                 </h4>
                 <div className={SIGN_GRID}>
                   {signs.map((entry) => (
-                    <SignCard
-                      key={entry.name}
-                      sign={entry.sign}
-                      name={entry.name}
-                      description={entry.description}
-                    />
+                    <div key={entry.name}>
+                      <SignCard
+                        sign={entry.sign}
+                        name={entry.name}
+                        description={entry.description}
+                      />
+                    </div>
                   ))}
                 </div>
               </div>
