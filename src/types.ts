@@ -1,4 +1,4 @@
-export type AppTab = 'home' | 'topics' | 'learning' | 'testing' | 'stats' | 'ai-chat';
+export type AppTab = 'home' | 'topics' | 'visual-learning' | 'learning' | 'testing' | 'stats' | 'ai-chat';
 
 export interface PdrTopic {
   id: string;

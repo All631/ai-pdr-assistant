@@ -676,7 +676,7 @@ function CombinedTest({
   );
 }
 
-export default function TrafficLessons() {
+export default function TrafficLessons({ standalone = false }: { standalone?: boolean }) {
   const [activeTab, setActiveTab] = useState<TabId>('signs');
   const [showCombinedTest, setShowCombinedTest] = useState(false);
   const [miniQuizScore, setMiniQuizScore] = useState({ correct: 0, total: 0 });
@@ -699,8 +699,8 @@ export default function TrafficLessons() {
   };
 
   return (
-    <section className="mt-10 space-y-6" id="traffic-lessons">
-      <div className="border-t border-slate-200 pt-8">
+    <section className={`space-y-6 ${standalone ? '' : 'mt-10'}`} id="traffic-lessons">
+      <div className={standalone ? '' : 'border-t border-slate-200 pt-8'}>
         <h2 className="font-display text-xl font-bold text-slate-900 sm:text-2xl">
           Візуальне навчання ПДР
         </h2>

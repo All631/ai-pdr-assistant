@@ -21,7 +21,6 @@ import {
   RefreshCw
 } from 'lucide-react';
 import { StopSign, GiveWaySign, SpeedLimitSign } from '../signs';
-import TrafficLessons from './TrafficLessons';
 import { motion, AnimatePresence } from 'motion/react';
 
 const topicsAdaptiveStyles = `
@@ -565,8 +564,6 @@ export default function TopicsView({ onMarkTopicCompleted, completedTopicIds }: 
           </div>
         </div>
       </div>
-
-      <TrafficLessons />
     </div>
     </>
   );

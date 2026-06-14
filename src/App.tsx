@@ -5,6 +5,7 @@ import Navbar from './components/Navbar';
 import HomeView from './components/HomeView';
 import LearningView from './components/LearningView';
 import TopicsView from './components/TopicsView';
+import VisualLearningView from './components/VisualLearningView';
 import TestingView from './components/TestingView';
 import StatsView from './components/StatsView';
 import AiChatView from './components/AiChatView';
@@ -209,6 +210,8 @@ export default function App() {
             completedTopicIds={completedTopicIds} 
           />
         );
+      case 'visual-learning':
+        return <VisualLearningView />;
       case 'testing':
         return (
           <TestingView 
