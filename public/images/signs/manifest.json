@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-15T10:25:04.010Z",
+  "generatedAt": "2026-06-15T14:31:47.293Z",
   "source": "Wikimedia Commons (UA road signs, DSTU 4100)",
   "downloadLimit": 45,
   "requestDelayMs": 2000,
@@ -28,7 +28,8 @@
       "category": "warning",
       "file": "1_33.svg",
       "assetId": "1_33",
-      "ok": false
+      "ok": true,
+      "cached": true
     },
     {
       "id": "pedestrian-crossing",
@@ -36,7 +37,8 @@
       "category": "warning",
       "file": "1_22.svg",
       "assetId": "1_22",
-      "ok": false
+      "ok": true,
+      "cached": true
     },
     {
       "id": "children",
@@ -44,7 +46,8 @@
       "category": "warning",
       "file": "1_23.svg",
       "assetId": "1_23",
-      "ok": false
+      "ok": true,
+      "cached": true
     },
     {
       "id": "steep-descent",
@@ -100,7 +103,8 @@
       "category": "warning",
       "file": "1_31.svg",
       "assetId": "1_31",
-      "ok": false
+      "wikiName": "UA_road_sign_1.31.1.svg",
+      "ok": true
     },
     {
       "id": "tunnel",
@@ -108,7 +112,8 @@
       "category": "warning",
       "file": "1_32.svg",
       "assetId": "1_32",
-      "ok": false
+      "wikiName": "UA road sign 1.32.svg",
+      "ok": true
     },
     {
       "id": "stop",
@@ -116,7 +121,8 @@
       "category": "priority",
       "file": "2_2.svg",
       "assetId": "2_2",
-      "ok": false
+      "wikiName": "UA road sign 2.2.svg",
+      "ok": true
     },
     {
       "id": "give-way",
@@ -124,7 +130,8 @@
       "category": "priority",
       "file": "2_4.svg",
       "assetId": "2_4",
-      "ok": false
+      "wikiName": "UA road sign 2.4.svg",
+      "ok": true
     },
     {
       "id": "main-road",
@@ -141,7 +148,8 @@
       "category": "priority",
       "file": "2_24.svg",
       "assetId": "2_24",
-      "ok": false
+      "wikiName": "UA road sign 2.2.svg",
+      "ok": true
     },
     {
       "id": "give-way-oncoming",
@@ -149,7 +157,8 @@
       "category": "priority",
       "file": "2_5.svg",
       "assetId": "2_5",
-      "ok": false
+      "wikiName": "UA road sign 2.5.svg",
+      "ok": true
     },
     {
       "id": "priority-intersection",
@@ -157,7 +166,8 @@
       "category": "priority",
       "file": "2_3.svg",
       "assetId": "2_3",
-      "ok": false
+      "wikiName": "UA road sign 2.3.svg",
+      "ok": true
     },
     {
       "id": "no-entry",
@@ -165,7 +175,8 @@
       "category": "prohibitory",
       "file": "3_1.svg",
       "assetId": "3_1",
-      "ok": false
+      "wikiName": "UA road sign 3.1.svg",
+      "ok": true
     },
     {
       "id": "no-overtaking",
@@ -173,7 +184,8 @@
       "category": "prohibitory",
       "file": "3_20.svg",
       "assetId": "3_20",
-      "ok": false
+      "wikiName": "UA road sign 3.20.svg",
+      "ok": true
     },
     {
       "id": "no-left",
@@ -181,7 +193,8 @@
       "category": "prohibitory",
       "file": "3_18.svg",
       "assetId": "3_18",
-      "ok": false
+      "wikiName": "UA road sign 3.18.svg",
+      "ok": true
     },
     {
       "id": "no-u-turn",
@@ -189,7 +202,8 @@
       "category": "prohibitory",
       "file": "3_19.svg",
       "assetId": "3_19",
-      "ok": false
+      "wikiName": "UA road sign 3.19.svg",
+      "ok": true
     },
     {
       "id": "speed-30",
@@ -197,7 +211,8 @@
       "category": "prohibitory",
       "file": "3_29_30.svg",
       "assetId": "3_29_30",
-      "ok": false
+      "wikiName": "UA road sign 3.29-020.svg",
+      "ok": true
     },
     {
       "id": "speed-50",
@@ -359,7 +374,8 @@
       "category": "info",
       "file": "5_1.svg",
       "assetId": "5_1",
-      "ok": false
+      "wikiName": "UA road sign 5.1.svg",
+      "ok": true
     },
     {
       "id": "hospital",
@@ -367,7 +383,8 @@
       "category": "service",
       "file": "5_29.svg",
       "assetId": "5_29",
-      "ok": false
+      "wikiName": "UA road sign 5.29.svg",
+      "ok": true
     }
   ]
 }

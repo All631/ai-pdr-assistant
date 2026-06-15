@@ -94,20 +94,21 @@ async function fetchSvgFromCommons(wikiFileName) {
   const url = `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(wikiFileName)}`;
 
   for (let attempt = 1; attempt <= MAX_DOWNLOAD_ATTEMPTS; attempt++) {
-    const res = await fetch(url, {
-      headers: { 'User-Agent': USER_AGENT },
-      redirect: 'follow',
-    });
+    try {
+      const res = await fetch(url, {
+        headers: { 'User-Agent': USER_AGENT },
+        redirect: 'follow',
+      });
 
-    if (res.status === 429) {
+      if (res.status === 429) return null;
+      if (!res.ok) return null;
+
+      const text = await res.text();
+      if (!text.includes('<svg') && !text.includes('<SVG')) return null;
+      return text;
+    } catch {
       return null;
     }
-
-    if (!res.ok) return null;
-
-    const text = await res.text();
-    if (!text.includes('<svg') && !text.includes('<SVG')) return null;
-    return text;
   }
 
   return null;
