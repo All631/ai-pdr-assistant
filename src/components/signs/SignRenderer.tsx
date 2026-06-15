@@ -1,22 +1,39 @@
 import React, { useMemo, useState } from 'react';
-import { TRAFFIC_SIGN_CATALOG } from '../../data/trafficSignsCatalog';
+import { TRAFFIC_SIGN_CATALOG, type SignCategoryId } from '../../data/trafficSignsCatalog';
 import { getSignImageSrc, getSignImageSrcByCode } from './signAssets';
 
 export type SignId = string;
 
 const SIZE = 52;
 
+const CATEGORY_STYLES: Record<
+  SignCategoryId,
+  { shape: 'triangle' | 'circle' | 'square' | 'rectangle'; bg: string; border: string; labelFill: string }
+> = {
+  warning: { shape: 'triangle', bg: '#ffffff', border: '#dc2626', labelFill: '#1e293b' },
+  priority: { shape: 'square', bg: '#ffffff', border: '#1e293b', labelFill: '#1e293b' },
+  prohibitory: { shape: 'circle', bg: '#ffffff', border: '#dc2626', labelFill: '#1e293b' },
+  mandatory: { shape: 'circle', bg: '#2563eb', border: '#1d4ed8', labelFill: '#ffffff' },
+  info: { shape: 'rectangle', bg: '#2563eb', border: '#1d4ed8', labelFill: '#ffffff' },
+  service: { shape: 'square', bg: '#2563eb', border: '#1d4ed8', labelFill: '#ffffff' },
+};
+
 function SignFallback({
   signId,
   code,
   name,
+  category,
   size,
 }: {
   signId: string;
   code?: string;
   name?: string;
+  category?: SignCategoryId;
   size: number;
 }) {
+  const style = category ? CATEGORY_STYLES[category] : CATEGORY_STYLES.warning;
+  const label = code ?? signId;
+
   return (
     <svg
       viewBox="0 0 100 100"
@@ -26,31 +43,32 @@ function SignFallback({
       aria-label={name ?? signId}
       role="img"
     >
-      <polygon points="50,6 94,90 6,90" fill="#ffffff" stroke="#dc2626" strokeWidth="6" />
+      {style.shape === 'triangle' && (
+        <polygon points="50,8 92,88 8,88" fill={style.bg} stroke={style.border} strokeWidth="6" />
+      )}
+      {style.shape === 'circle' && (
+        <circle cx="50" cy="50" r="42" fill={style.bg} stroke={style.border} strokeWidth="6" />
+      )}
+      {style.shape === 'square' && (
+        <rect x="12" y="12" width="76" height="76" rx="4" fill={style.bg} stroke={style.border} strokeWidth="5" />
+      )}
+      {style.shape === 'rectangle' && (
+        <rect x="8" y="22" width="84" height="56" rx="6" fill={style.bg} stroke={style.border} strokeWidth="5" />
+      )}
+      {category === 'mandatory' && !code && (
+        <polygon points="50,28 62,58 38,58" fill={style.labelFill} />
+      )}
       <text
         x="50"
-        y="62"
+        y={category === 'mandatory' && !code ? '72' : '58'}
         textAnchor="middle"
-        fontSize="22"
-        fontWeight="800"
-        fill="#dc2626"
+        fontSize={label.length > 5 ? 14 : 18}
+        fontWeight="700"
+        fill={style.labelFill}
         fontFamily="system-ui, sans-serif"
       >
-        ПДР
+        {label}
       </text>
-      {code && (
-        <text
-          x="50"
-          y="82"
-          textAnchor="middle"
-          fontSize="11"
-          fontWeight="600"
-          fill="#64748b"
-          fontFamily="system-ui, sans-serif"
-        >
-          {code}
-        </text>
-      )}
     </svg>
   );
 }
@@ -61,21 +79,21 @@ export function SignRenderer({ signId, size = SIZE }: { signId: SignId; size?: n
     [signId]
   );
 
-  const [failedSrc, setFailedSrc] = useState<string | null>(null);
+  const [imageError, setImageError] = useState(false);
+  const [useCodeAlias, setUseCodeAlias] = useState(false);
+
   const primarySrc = getSignImageSrc(signId, entry?.code);
   const codeSrc = entry ? getSignImageSrcByCode(entry.code) : null;
+  const hasAlias = Boolean(codeSrc && codeSrc !== primarySrc);
+  const src = useCodeAlias && hasAlias ? codeSrc! : primarySrc;
 
-  const src =
-    failedSrc === primarySrc && codeSrc && codeSrc !== primarySrc ? codeSrc : primarySrc;
-
-  const [showFallback, setShowFallback] = useState(false);
-
-  if (showFallback) {
+  if (imageError) {
     return (
       <SignFallback
         signId={signId}
         code={entry?.code}
         name={entry?.name}
+        category={entry?.category}
         size={size}
       />
     );
@@ -83,6 +101,7 @@ export function SignRenderer({ signId, size = SIZE }: { signId: SignId; size?: n
 
   return (
     <img
+      key={src}
       src={src}
       alt={entry?.name ?? signId}
       width={size}
@@ -91,11 +110,11 @@ export function SignRenderer({ signId, size = SIZE }: { signId: SignId; size?: n
       loading="lazy"
       decoding="async"
       onError={() => {
-        if (codeSrc && src === primarySrc && failedSrc !== primarySrc) {
-          setFailedSrc(primarySrc);
+        if (!useCodeAlias && hasAlias) {
+          setUseCodeAlias(true);
           return;
         }
-        setShowFallback(true);
+        setImageError(true);
       }}
     />
   );
