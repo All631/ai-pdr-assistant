@@ -8,267 +8,27 @@ import {
   Trophy,
 } from 'lucide-react';
 import {
-  NoEntrySign,
-  NoOvertakingSign,
-  NoLeftTurnSign,
-  NoUTurnSign,
-  SpeedLimitSign,
-  StopSign,
-  GiveWaySign,
-  MainRoadSign,
-  PedestrianCrossingSign,
-  ChildrenSign,
-  ParkingSign,
-  DangerousTurnSign,
-  CrossroadsSign,
-  GeneralDangerSign,
-  SteepDescentSign,
-  SteepAscentSign,
-  WildAnimalsSign,
-  RoadWorksSign,
-  SlipperyRoadSign,
-  EndOfMainRoadSign,
-  HospitalSign,
-  GasStationSign,
-  RestAreaSign,
-  DirectionSign,
-  RoundaboutSign,
-  StraightAheadSign,
-  TurnRightSign,
-  BusLaneSign,
-  BicycleLaneSign,
-} from './signs';
-import { ROAD_MARKINGS } from '../data/roadMarkingsData';
-import {
-  TrafficLightCard,
-  RegulatorGesture,
-  REGULATOR_GESTURES,
+  TrafficLightsGallery,
+  RegulatorGestureSection,
+  REGULATOR_GESTURE_GROUPS,
   RoadMarking,
   MiniQuiz,
   loadVisualLessonsProgress,
   saveVisualLessonsProgress,
   type QuizQuestion,
 } from './visual';
+import { ROAD_MARKINGS } from '../data/roadMarkingsData';
+import { SignGallery } from './visual/signs/SignGallery';
+import { TRAFFIC_SIGN_CATALOG } from '../data/trafficSignsCatalog';
 
 type TabId = 'signs' | 'regulator' | 'markings' | 'lights';
 
-interface SignEntry {
-  sign: React.ReactNode;
-  name: string;
-  description: string;
-  category: string;
-}
-
 const TABS: { id: TabId; label: string; emoji: string }[] = [
-  { id: 'signs', label: 'Всі знаки (35+)', emoji: '📋' },
+  { id: 'signs', label: `Всі знаки (${TRAFFIC_SIGN_CATALOG.length})`, emoji: '📋' },
   { id: 'regulator', label: 'Регулювальник', emoji: '👮' },
   { id: 'markings', label: 'Розмітка', emoji: '🛣️' },
   { id: 'lights', label: 'Світлофори', emoji: '🚦' },
 ];
-
-const SIGN_GRID = 'grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5';
-
-function buildSignCatalog(): SignEntry[] {
-  const limits = [20, 30, 40, 50, 60, 70, 90, 110];
-  const speedSigns: SignEntry[] = limits.map((limit) => ({
-    sign: <SpeedLimitSign limit={limit} size={52} />,
-    name: `Швидкість ${limit}`,
-    description: `Обмеження максимальної швидкості ${limit} км/год`,
-    category: 'Заборонні',
-  }));
-
-  return [
-    {
-      sign: <NoEntrySign size={52} />,
-      name: "В'їзд заборонено",
-      description: "Забороняє в'їзд усіх транспортних засобів",
-      category: 'Заборонні',
-    },
-    {
-      sign: <NoOvertakingSign size={52} />,
-      name: 'Обгін заборонено',
-      description: 'Забороняє обгін інших транспортних засобів',
-      category: 'Заборонні',
-    },
-    {
-      sign: <NoLeftTurnSign size={52} />,
-      name: 'Поворот ліворуч заборонено',
-      description: 'Забороняє поворот ліворуч на перехресті',
-      category: 'Заборонні',
-    },
-    {
-      sign: <NoUTurnSign size={52} />,
-      name: 'Розворот заборонено',
-      description: 'Забороняє розворот на 180°',
-      category: 'Заборонні',
-    },
-    ...speedSigns,
-    {
-      sign: <DangerousTurnSign size={52} />,
-      name: 'Небезпечний поворот',
-      description: 'Попереджає про різкий поворот',
-      category: 'Попереджувальні',
-    },
-    {
-      sign: <CrossroadsSign size={52} />,
-      name: 'Перехрестя',
-      description: 'Попереджає про перехрестя',
-      category: 'Попереджувальні',
-    },
-    {
-      sign: <GeneralDangerSign size={52} />,
-      name: 'Небезпека',
-      description: 'Загальне попередження про небезпеку',
-      category: 'Попереджувальні',
-    },
-    {
-      sign: <PedestrianCrossingSign size={52} />,
-      name: 'Пішохідний перехід',
-      description: 'Попереджає про наближення до переходу',
-      category: 'Попереджувальні',
-    },
-    {
-      sign: <ChildrenSign size={52} />,
-      name: 'Діти',
-      description: 'Можливий вихід дітей на дорогу',
-      category: 'Попереджувальні',
-    },
-    {
-      sign: <SteepDescentSign size={52} />,
-      name: 'Крутий спуск',
-      description: 'Попереджає про крутий спуск',
-      category: 'Попереджувальні',
-    },
-    {
-      sign: <SteepAscentSign size={52} />,
-      name: 'Крутий підйом',
-      description: 'Попереджає про крутий підйом',
-      category: 'Попереджувальні',
-    },
-    {
-      sign: <WildAnimalsSign size={52} />,
-      name: 'Дикі тварини',
-      description: 'Можливий вихід тварин на дорогу',
-      category: 'Попереджувальні',
-    },
-    {
-      sign: <RoadWorksSign size={52} />,
-      name: 'Дорожні роботи',
-      description: 'Попереджає про ремонт дороги',
-      category: 'Попереджувальні',
-    },
-    {
-      sign: <SlipperyRoadSign size={52} />,
-      name: 'Слизька дорога',
-      description: 'Попереджає про слизьке покриття',
-      category: 'Попереджувальні',
-    },
-    {
-      sign: <StopSign size={52} />,
-      name: 'STOP',
-      description: 'Повна зупинка перед перехрестям',
-      category: 'Пріоритет',
-    },
-    {
-      sign: <GiveWaySign size={52} />,
-      name: 'Дати дорогу',
-      description: 'Поступитися дорогою на перехресті',
-      category: 'Пріоритет',
-    },
-    {
-      sign: <MainRoadSign size={52} />,
-      name: 'Головна дорога',
-      description: 'Ви рухаєтесь головною дорогою',
-      category: 'Пріоритет',
-    },
-    {
-      sign: <EndOfMainRoadSign size={52} />,
-      name: 'Кінець головної',
-      description: 'Закінчення головної дороги',
-      category: 'Пріоритет',
-    },
-    {
-      sign: <GiveWaySign size={52} />,
-      name: 'Поступись зустрічному',
-      description: 'Вузька дорога — дати дорогу зустрічному',
-      category: 'Пріоритет',
-    },
-    {
-      sign: <ParkingSign size={52} />,
-      name: 'Парковка',
-      description: 'Місце для стоянки транспортних засобів',
-      category: 'Інформаційні',
-    },
-    {
-      sign: <HospitalSign size={52} />,
-      name: 'Лікарня',
-      description: 'Наближення до медичного закладу',
-      category: 'Інформаційні',
-    },
-    {
-      sign: <GasStationSign size={52} />,
-      name: 'АЗС',
-      description: 'Паливна станція поблизу',
-      category: 'Інформаційні',
-    },
-    {
-      sign: <RestAreaSign size={52} />,
-      name: 'Місце відпочинку',
-      description: 'Зона відпочинку для водіїв',
-      category: 'Інформаційні',
-    },
-    {
-      sign: <DirectionSign size={52} />,
-      name: 'Напрямок руху',
-      description: 'Вказує дозволений напрямок',
-      category: 'Інформаційні',
-    },
-    {
-      sign: <RoundaboutSign size={52} />,
-      name: 'Круговий рух',
-      description: 'Попереджає про кругове перехрестя',
-      category: 'Наказові',
-    },
-    {
-      sign: <StraightAheadSign size={52} />,
-      name: 'Рух прямо',
-      description: 'Дозволено рух лише прямо',
-      category: 'Наказові',
-    },
-    {
-      sign: <TurnRightSign size={52} />,
-      name: 'Поворот праворуч',
-      description: 'Дозволено поворот праворуч',
-      category: 'Наказові',
-    },
-    {
-      sign: <BusLaneSign size={52} />,
-      name: 'Смуга для автобусів',
-      description: 'Виділена смуга громадського транспорту',
-      category: 'Наказові',
-    },
-    {
-      sign: <BicycleLaneSign size={52} />,
-      name: 'Велосипедна доріжка',
-      description: 'Доріжка для велосипедистів',
-      category: 'Наказові',
-    },
-    {
-      sign: <NoEntrySign size={52} />,
-      name: 'Стоянка заборонена',
-      description: 'Забороняє зупинку та стоянку',
-      category: 'Заборонні',
-    },
-    {
-      sign: <SpeedLimitSign limit={130} size={52} />,
-      name: 'Швидкість 130',
-      description: 'Ліміт на автомагістралі',
-      category: 'Заборонні',
-    },
-  ];
-}
-
-const SIGN_CATALOG = buildSignCatalog();
 
 const SIGNS_QUIZ: QuizQuestion[] = [
   {
@@ -312,7 +72,7 @@ const REGULATOR_QUIZ: QuizQuestion[] = [
     question: 'Руки регулювальника витягнуті в сторони. З його правого боку дозволено:',
     options: ['Лише ліворуч', 'Прямо та праворуч', 'Рух заборонено'],
     correctIndex: 1,
-    explanation: 'При жесті «руки в сторони» з правого боку регулювальника дозволено рух прямо та праворуч.',
+    explanation: 'При жесті «руки в сторони» з правого боку регулювальника дозволено рух прямо та праворuch.',
   },
 ];
 
@@ -360,32 +120,22 @@ const LIGHTS_QUIZ: QuizQuestion[] = [
   {
     id: 'light-q2',
     section: 'Світлофори',
-    question: 'Червоний + жовтий сигнал означає:',
-    options: ['Стоп', 'Приготуватися — скоро зелений', 'Можна їхати'],
+    question: 'Зелена стрілка при червоному основному сигналі означає:',
+    options: ['Можна їхати у всіх напрямках', 'Рух лише у напрямку стрілки, поступившись іншим', 'Стоп'],
     correctIndex: 1,
-    explanation: 'Комбінація червоного та жовтого попереджає про увімкнення зеленого.',
+    explanation: 'Додаткова зелена стрілка при червоному дозволяє рух у напрямку стрілки з обов\'язковим поступленням.',
   },
   {
     id: 'light-q3',
     section: 'Світлофори',
-    question: 'Жовтий сигнал (без червоного) означає:',
-    options: ['Можна прискоритися', 'Стоп, якщо можна безпечно зупинитись', 'Зелена зона для пішоходів'],
+    question: 'Червоний Х на реверсивному світлофорі означає:',
+    options: ['Можна їхати обережно', 'Рух смугою заборонено', 'Увімкнеться зелений'],
     correctIndex: 1,
-    explanation: 'Жовтий забороняє рух, крім випадків, коли зупинка неможлива без екстреного гальмування.',
+    explanation: 'Червоний Х забороняє рух реверсивною смугою.',
   },
 ];
 
 const ALL_QUIZ_QUESTIONS = [...SIGNS_QUIZ, ...REGULATOR_QUIZ, ...MARKINGS_QUIZ, ...LIGHTS_QUIZ];
-
-function SignCard({ sign, name, description }: { sign: React.ReactNode; name: string; description: string }) {
-  return (
-    <div className="flex flex-col items-center rounded-2xl border border-slate-100 bg-white p-3 sm:p-4 text-center shadow-sm">
-      <div className="mb-2 sm:mb-3 flex h-14 w-14 sm:h-16 sm:w-16 items-center justify-center">{sign}</div>
-      <p className="text-4xs sm:text-xs font-bold text-slate-800 leading-tight">{name}</p>
-      <p className="mt-1 text-4xs leading-relaxed text-slate-500 hidden sm:block">{description}</p>
-    </div>
-  );
-}
 
 function CombinedTest({
   questions,
@@ -425,11 +175,7 @@ function CombinedTest({
           <Trophy className="h-5 w-5 text-amber-500" />
           Загальний тест ({questions.length} питань)
         </h4>
-        <button
-          type="button"
-          onClick={handleClose}
-          className="text-4xs font-bold text-slate-500 hover:text-slate-700"
-        >
+        <button type="button" onClick={handleClose} className="text-4xs font-bold text-slate-500 hover:text-slate-700">
           Закрити
         </button>
       </div>
@@ -478,19 +224,6 @@ function CombinedTest({
             <p className="mt-1 text-sm text-slate-600">
               Правильно: {results.correct} з {questions.length}
             </p>
-            {results.percent >= 80 ? (
-              <p className="mt-3 text-sm font-medium text-emerald-700">
-                Чудовий результат! Ви добре знаєте ПДР.
-              </p>
-            ) : results.percent >= 50 ? (
-              <p className="mt-3 text-sm font-medium text-amber-700">
-                Непогано, але варто повторити теми з помилками.
-              </p>
-            ) : (
-              <p className="mt-3 text-sm font-medium text-rose-700">
-                Рекомендуємо ще раз переглянути знаки, регулювальника та розмітку.
-              </p>
-            )}
             {results.wrong.length > 0 && (
               <div className="mt-4 text-left rounded-xl bg-white border border-slate-100 p-4">
                 <p className="text-xs font-bold text-slate-700 mb-2 flex items-center gap-1">
@@ -506,16 +239,6 @@ function CombinedTest({
                 </ul>
               </div>
             )}
-            <button
-              type="button"
-              onClick={() => {
-                setAnswers({});
-                setSubmitted(false);
-              }}
-              className="mt-4 rounded-xl border border-slate-200 bg-white px-5 py-2.5 text-xs font-bold text-slate-700 hover:bg-slate-50"
-            >
-              Пройти ще раз
-            </button>
           </div>
         )
       )}
@@ -535,16 +258,6 @@ export default function TrafficLessons({ standalone = false }: { standalone?: bo
 
   const { answers, submitted, miniQuizScore } = progress;
 
-  const signCategories = useMemo(() => {
-    const map = new Map<string, SignEntry[]>();
-    for (const entry of SIGN_CATALOG) {
-      const list = map.get(entry.category) ?? [];
-      list.push(entry);
-      map.set(entry.category, list);
-    }
-    return map;
-  }, []);
-
   const handleMiniAnswer = (questionId: string, optionIndex: number, isCorrect: boolean) => {
     setProgress((prev) => {
       if (prev.submitted[questionId]) return prev;
@@ -562,15 +275,13 @@ export default function TrafficLessons({ standalone = false }: { standalone?: bo
   return (
     <section className={`space-y-6 ${standalone ? '' : 'mt-10'}`} id="traffic-lessons">
       <div className={standalone ? '' : 'border-t border-slate-200 pt-8'}>
-        <h2 className="font-display text-xl font-bold text-slate-900 sm:text-2xl">
-          Візуальне навчання ПДР
-        </h2>
+        <h2 className="font-display text-xl font-bold text-slate-900 sm:text-2xl">Візуальне навчання ПДР</h2>
         <p className="mt-1.5 text-sm text-slate-500">
-          {SIGN_CATALOG.length} знаків, регулювальник, розмітка та світлофори з міні-тестами.
+          {TRAFFIC_SIGN_CATALOG.length} знаків (ДСТУ 4100), регулювальник (п. 8.7.3), {ROAD_MARKINGS.length} типів
+          розмітки та 5 інтерактивних світлофорів.
         </p>
       </div>
 
-      {/* Tabs */}
       <div className="flex flex-nowrap gap-2 overflow-x-auto pb-2 custom-scrollbar">
         {TABS.map((tab) => (
           <button
@@ -588,7 +299,6 @@ export default function TrafficLessons({ standalone = false }: { standalone?: bo
         ))}
       </div>
 
-      {/* Pass all tests button */}
       <div className="flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between">
         <button
           type="button"
@@ -618,37 +328,15 @@ export default function TrafficLessons({ standalone = false }: { standalone?: bo
         />
       )}
 
-      {/* Signs tab */}
       {activeTab === 'signs' && (
         <div className="rounded-2xl border border-slate-100 bg-white p-4 shadow-sm sm:p-8">
           <div className="mb-6 flex items-center gap-2">
             <BookOpen className="h-5 w-5 text-blue-600" />
             <h3 className="font-display text-lg font-bold text-slate-900">
-              Галерея дорожніх знаків ({SIGN_CATALOG.length})
+              Галерея дорожніх знаків ({TRAFFIC_SIGN_CATALOG.length})
             </h3>
           </div>
-
-          <div className="space-y-8">
-            {Array.from(signCategories.entries()).map(([category, signs]) => (
-              <div key={category}>
-                <h4 className="mb-3 text-xs font-bold uppercase tracking-wider text-slate-500">
-                  {category}
-                </h4>
-                <div className={SIGN_GRID}>
-                  {signs.map((entry) => (
-                    <div key={entry.name}>
-                      <SignCard
-                        sign={entry.sign}
-                        name={entry.name}
-                        description={entry.description}
-                      />
-                    </div>
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
-
+          <SignGallery />
           <MiniQuiz
             blockId="signs"
             title="Дорожні знаки"
@@ -660,26 +348,17 @@ export default function TrafficLessons({ standalone = false }: { standalone?: bo
         </div>
       )}
 
-      {/* Regulator tab */}
       {activeTab === 'regulator' && (
         <div className="rounded-2xl border border-slate-100 bg-white p-4 shadow-sm sm:p-8">
           <div className="mb-6 flex items-center gap-2">
             <UserRound className="h-5 w-5 text-indigo-600" />
             <h3 className="font-display text-lg font-bold text-slate-900">Регулювальник</h3>
           </div>
-
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-            {REGULATOR_GESTURES.map((gesture) => (
-              <RegulatorGesture
-                key={gesture.variant}
-                variant={gesture.variant}
-                label={gesture.label}
-                description={gesture.description}
-                legalDetails={gesture.legalDetails}
-              />
+          <div className="space-y-8">
+            {REGULATOR_GESTURE_GROUPS.map((group) => (
+              <RegulatorGestureSection key={group.id} group={group} />
             ))}
           </div>
-
           <MiniQuiz
             blockId="regulator"
             title="Регулювальник"
@@ -691,20 +370,17 @@ export default function TrafficLessons({ standalone = false }: { standalone?: bo
         </div>
       )}
 
-      {/* Markings tab */}
       {activeTab === 'markings' && (
         <div className="rounded-2xl border border-slate-100 bg-white p-4 shadow-sm sm:p-8">
           <div className="mb-6 flex items-center gap-2">
             <Paintbrush className="h-5 w-5 text-slate-600" />
             <h3 className="font-display text-lg font-bold text-slate-900">Дорожня розмітка</h3>
           </div>
-
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {ROAD_MARKINGS.map((marking) => (
               <RoadMarking key={marking.code} entry={marking} />
             ))}
           </div>
-
           <MiniQuiz
             blockId="markings"
             title="Дорожня розмітка"
@@ -716,45 +392,13 @@ export default function TrafficLessons({ standalone = false }: { standalone?: bo
         </div>
       )}
 
-      {/* Traffic lights tab */}
       {activeTab === 'lights' && (
         <div className="rounded-2xl border border-slate-100 bg-white p-4 shadow-sm sm:p-8">
           <div className="mb-6 flex items-center gap-2">
             <TrafficCone className="h-5 w-5 text-red-600" />
             <h3 className="font-display text-lg font-bold text-slate-900">Світлофори</h3>
           </div>
-
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            <TrafficLightCard
-              redOn
-              yellowOn={false}
-              greenOn={false}
-              label="Червоний"
-              rule="Стоп — рух заборонено."
-            />
-            <TrafficLightCard
-              redOn
-              yellowOn
-              greenOn={false}
-              label="Червоний + жовтий"
-              rule="Приготуватися — скоро увімкнеться зелений."
-            />
-            <TrafficLightCard
-              redOn={false}
-              yellowOn={false}
-              greenOn
-              label="Зелений"
-              rule="Можна їхати, якщо перехрестя вільне."
-            />
-            <TrafficLightCard
-              redOn={false}
-              yellowOn
-              greenOn={false}
-              label="Жовтий"
-              rule="Стоп, якщо можна безпечно зупинитись."
-            />
-          </div>
-
+          <TrafficLightsGallery />
           <MiniQuiz
             blockId="lights"
             title="Світлофори"

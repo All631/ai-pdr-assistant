@@ -34,3 +34,28 @@ export {
   BusLaneSign,
   BicycleLaneSign,
 } from './AdditionalSignIcons';
+
+export {
+  RailwayCrossingSign,
+  TunnelSign,
+  PriorityIntersectionSign,
+  NoParkingSign,
+  NoStoppingSign,
+  NoHornsSign,
+  TurnLeftSign,
+  MandatoryRoundaboutSign,
+  OneWaySign,
+  DeadEndSign,
+  PedestrianZoneSign,
+  LivingZoneSign,
+  MotorwaySign,
+  HotelSign,
+  FoodSign,
+  TelephoneSign,
+  FirstAidSign,
+  CarServiceSign,
+  SignPlateSign,
+  MinSpeedSign,
+} from './ExtendedSignIcons';
+
+export { SignRenderer } from './SignRenderer';
