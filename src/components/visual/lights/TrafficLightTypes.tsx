@@ -11,6 +11,7 @@ import {
   PedWalkingIcon,
   RedXIcon,
 } from './LightShared';
+import { TRAM_LIGHT_DESCRIPTIONS, TRAM_LIGHT_LABELS } from './tramLightLegal';
 
 export function StandardTrafficLight() {
   const uid = useLightUid();
@@ -172,7 +173,7 @@ export function ReversibleTrafficLight() {
   );
 }
 
-type TramMode = 'stop' | 'straight' | 'left' | 'right';
+type TramMode = 'stop' | 'straight' | 'left' | 'right' | 'top-only';
 
 export function TramTrafficLight() {
   const uid = useLightUid();
@@ -181,8 +182,9 @@ export function TramTrafficLight() {
   const lenses: Record<TramMode, [boolean, boolean, boolean, boolean]> = {
     stop: [false, false, false, false],
     straight: [true, false, false, true],
-    left: [true, true, false, false],
+    left: [true, true, false, true],
     right: [false, false, true, true],
+    'top-only': [true, true, true, false],
   };
   const [top, left, right, bottom] = lenses[mode];
   const moon = '#f8fafc';
@@ -204,22 +206,14 @@ export function TramTrafficLight() {
   return (
     <InteractiveLightCard
       title="Т-подібний (трамвайний)"
-      description={
-        mode === 'stop'
-          ? 'Усі лінзи погаслі — рух заборонено.'
-          : mode === 'straight'
-            ? 'Верхня + нижня лінзи: рух прямо за рейками.'
-            : mode === 'left'
-              ? 'Верхня + ліва: рух прямо або ліворуч.'
-              : `Права + нижня: поворот праворuch або від'їзд у бік.`
-      }
+      description={TRAM_LIGHT_DESCRIPTIONS[mode]}
       controls={
-        (['stop', 'straight', 'left', 'right'] as TramMode[]).map((m) => (
+        (['stop', 'straight', 'left', 'right', 'top-only'] as TramMode[]).map((m) => (
           <LightControlBtn
             key={m}
             active={mode === m}
             onClick={() => setMode(m)}
-            label={m === 'stop' ? 'Стоп' : m === 'straight' ? 'Прямо' : m === 'left' ? 'Ліворuch' : 'Праворuch'}
+            label={TRAM_LIGHT_LABELS[m]}
           />
         ))
       }
