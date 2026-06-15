@@ -1,0 +1,373 @@
+{
+  "generatedAt": "2026-06-15T10:25:04.010Z",
+  "source": "Wikimedia Commons (UA road signs, DSTU 4100)",
+  "downloadLimit": 45,
+  "requestDelayMs": 2000,
+  "signs": [
+    {
+      "id": "dangerous-turn",
+      "code": "1.12",
+      "category": "warning",
+      "file": "1_12.svg",
+      "assetId": "1_12",
+      "ok": true,
+      "cached": true
+    },
+    {
+      "id": "crossroads",
+      "code": "1.30",
+      "category": "warning",
+      "file": "1_30.svg",
+      "assetId": "1_30",
+      "ok": true,
+      "cached": true
+    },
+    {
+      "id": "general-danger",
+      "code": "1.33",
+      "category": "warning",
+      "file": "1_33.svg",
+      "assetId": "1_33",
+      "ok": false
+    },
+    {
+      "id": "pedestrian-crossing",
+      "code": "1.22",
+      "category": "warning",
+      "file": "1_22.svg",
+      "assetId": "1_22",
+      "ok": false
+    },
+    {
+      "id": "children",
+      "code": "1.23",
+      "category": "warning",
+      "file": "1_23.svg",
+      "assetId": "1_23",
+      "ok": false
+    },
+    {
+      "id": "steep-descent",
+      "code": "1.14",
+      "category": "warning",
+      "file": "1_14.svg",
+      "assetId": "1_14",
+      "ok": false
+    },
+    {
+      "id": "steep-ascent",
+      "code": "1.13",
+      "category": "warning",
+      "file": "1_13.svg",
+      "assetId": "1_13",
+      "ok": false
+    },
+    {
+      "id": "wild-animals",
+      "code": "1.24",
+      "category": "warning",
+      "file": "1_24.svg",
+      "assetId": "1_24",
+      "ok": false
+    },
+    {
+      "id": "road-works",
+      "code": "1.34",
+      "category": "warning",
+      "file": "1_34.svg",
+      "assetId": "1_34",
+      "ok": false
+    },
+    {
+      "id": "slippery",
+      "code": "1.19",
+      "category": "warning",
+      "file": "1_19.svg",
+      "assetId": "1_19",
+      "ok": false
+    },
+    {
+      "id": "roundabout-warn",
+      "code": "1.29",
+      "category": "warning",
+      "file": "1_29.svg",
+      "assetId": "1_29",
+      "ok": false
+    },
+    {
+      "id": "railway",
+      "code": "1.31",
+      "category": "warning",
+      "file": "1_31.svg",
+      "assetId": "1_31",
+      "ok": false
+    },
+    {
+      "id": "tunnel",
+      "code": "1.32",
+      "category": "warning",
+      "file": "1_32.svg",
+      "assetId": "1_32",
+      "ok": false
+    },
+    {
+      "id": "stop",
+      "code": "2.2",
+      "category": "priority",
+      "file": "2_2.svg",
+      "assetId": "2_2",
+      "ok": false
+    },
+    {
+      "id": "give-way",
+      "code": "2.4",
+      "category": "priority",
+      "file": "2_4.svg",
+      "assetId": "2_4",
+      "ok": false
+    },
+    {
+      "id": "main-road",
+      "code": "2.1",
+      "category": "priority",
+      "file": "2_1.svg",
+      "assetId": "2_1",
+      "ok": true,
+      "cached": true
+    },
+    {
+      "id": "end-main-road",
+      "code": "2.2",
+      "category": "priority",
+      "file": "2_24.svg",
+      "assetId": "2_24",
+      "ok": false
+    },
+    {
+      "id": "give-way-oncoming",
+      "code": "2.5",
+      "category": "priority",
+      "file": "2_5.svg",
+      "assetId": "2_5",
+      "ok": false
+    },
+    {
+      "id": "priority-intersection",
+      "code": "2.3",
+      "category": "priority",
+      "file": "2_3.svg",
+      "assetId": "2_3",
+      "ok": false
+    },
+    {
+      "id": "no-entry",
+      "code": "3.1",
+      "category": "prohibitory",
+      "file": "3_1.svg",
+      "assetId": "3_1",
+      "ok": false
+    },
+    {
+      "id": "no-overtaking",
+      "code": "3.20",
+      "category": "prohibitory",
+      "file": "3_20.svg",
+      "assetId": "3_20",
+      "ok": false
+    },
+    {
+      "id": "no-left",
+      "code": "3.18",
+      "category": "prohibitory",
+      "file": "3_18.svg",
+      "assetId": "3_18",
+      "ok": false
+    },
+    {
+      "id": "no-u-turn",
+      "code": "3.19",
+      "category": "prohibitory",
+      "file": "3_19.svg",
+      "assetId": "3_19",
+      "ok": false
+    },
+    {
+      "id": "speed-30",
+      "code": "3.29",
+      "category": "prohibitory",
+      "file": "3_29_30.svg",
+      "assetId": "3_29_30",
+      "ok": false
+    },
+    {
+      "id": "speed-50",
+      "code": "3.29",
+      "category": "prohibitory",
+      "file": "3_29_50.svg",
+      "assetId": "3_29_50",
+      "ok": false
+    },
+    {
+      "id": "speed-70",
+      "code": "3.29",
+      "category": "prohibitory",
+      "file": "3_29_70.svg",
+      "assetId": "3_29_70",
+      "ok": false
+    },
+    {
+      "id": "speed-90",
+      "code": "3.29",
+      "category": "prohibitory",
+      "file": "3_29_90.svg",
+      "assetId": "3_29_90",
+      "ok": false
+    },
+    {
+      "id": "no-parking",
+      "code": "3.34",
+      "category": "prohibitory",
+      "file": "3_34.svg",
+      "assetId": "3_34",
+      "ok": false
+    },
+    {
+      "id": "no-stopping",
+      "code": "3.33",
+      "category": "prohibitory",
+      "file": "3_33.svg",
+      "assetId": "3_33",
+      "ok": false
+    },
+    {
+      "id": "no-horns",
+      "code": "3.32",
+      "category": "prohibitory",
+      "file": "3_32.svg",
+      "assetId": "3_32",
+      "ok": false
+    },
+    {
+      "id": "straight",
+      "code": "4.1.1",
+      "category": "mandatory",
+      "file": "4_1_1.svg",
+      "assetId": "4_1_1",
+      "ok": false
+    },
+    {
+      "id": "turn-right",
+      "code": "4.1.2",
+      "category": "mandatory",
+      "file": "4_1_2.svg",
+      "assetId": "4_1_2",
+      "ok": false
+    },
+    {
+      "id": "turn-left",
+      "code": "4.1.2",
+      "category": "mandatory",
+      "file": "4_1_2_1.svg",
+      "assetId": "4_1_2_1",
+      "ok": false
+    },
+    {
+      "id": "roundabout-mandatory",
+      "code": "4.3",
+      "category": "mandatory",
+      "file": "4_3.svg",
+      "assetId": "4_3",
+      "ok": false
+    },
+    {
+      "id": "bicycle-lane",
+      "code": "4.4.1",
+      "category": "mandatory",
+      "file": "4_4_1.svg",
+      "assetId": "4_4_1",
+      "ok": false
+    },
+    {
+      "id": "bus-lane",
+      "code": "5.14",
+      "category": "mandatory",
+      "file": "5_14.svg",
+      "assetId": "5_14",
+      "ok": false
+    },
+    {
+      "id": "min-speed-40",
+      "code": "3.27",
+      "category": "mandatory",
+      "file": "3_27_40.svg",
+      "assetId": "3_27_40",
+      "ok": false
+    },
+    {
+      "id": "parking",
+      "code": "6.4",
+      "category": "info",
+      "file": "6_4.svg",
+      "assetId": "6_4",
+      "ok": false
+    },
+    {
+      "id": "direction",
+      "code": "5.7",
+      "category": "info",
+      "file": "5_7.svg",
+      "assetId": "5_7",
+      "ok": false
+    },
+    {
+      "id": "one-way",
+      "code": "5.5",
+      "category": "info",
+      "file": "5_5.svg",
+      "assetId": "5_5",
+      "ok": true,
+      "cached": true
+    },
+    {
+      "id": "dead-end",
+      "code": "5.6",
+      "category": "info",
+      "file": "5_6.svg",
+      "assetId": "5_6",
+      "ok": true,
+      "cached": true
+    },
+    {
+      "id": "pedestrian-zone",
+      "code": "5.38",
+      "category": "info",
+      "file": "5_38.svg",
+      "assetId": "5_38",
+      "ok": false
+    },
+    {
+      "id": "living-zone",
+      "code": "5.38",
+      "category": "info",
+      "file": "5_38_1.svg",
+      "assetId": "5_38_1",
+      "ok": false
+    },
+    {
+      "id": "motorway",
+      "code": "5.1",
+      "category": "info",
+      "file": "5_1.svg",
+      "assetId": "5_1",
+      "ok": false
+    },
+    {
+      "id": "hospital",
+      "code": "5.29",
+      "category": "service",
+      "file": "5_29.svg",
+      "assetId": "5_29",
+      "ok": false
+    }
+  ]
+}
