@@ -1,10 +1,10 @@
 import React, { useMemo, useState } from 'react';
-import { SignRenderer } from '../signs/SignRenderer';
+import { SignRenderer } from '../../signs/SignRenderer';
 import {
   SIGN_CATEGORIES,
   TRAFFIC_SIGN_CATALOG,
   type SignCategoryId,
-} from '../../data/trafficSignsCatalog';
+} from '../../../data/trafficSignsCatalog';
 
 const GRID = 'grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5';
 

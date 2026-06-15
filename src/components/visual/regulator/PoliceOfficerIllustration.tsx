@@ -1,5 +1,5 @@
 import React, { useId } from 'react';
-import type { ApproachSide, RegulatorGestureId } from '../../data/regulatorGesturesData';
+import type { ApproachSide, RegulatorGestureId } from '../../../data/regulatorGesturesData';
 
 const NPU_BLUE = '#0c1f3d';
 const NPU_BLUE_LIGHT = '#1e3a5f';
