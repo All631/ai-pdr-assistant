@@ -249,6 +249,7 @@ export default function App() {
     localStorage.removeItem('pdr_completed_topics');
     localStorage.removeItem('pdr_user_stats');
     localStorage.removeItem('pdr_bookmarks');
+    localStorage.removeItem('pdr_visual_lessons_progress');
     setCompletedTopicIds([]);
     setStats(DEFAULT_STATS);
     setBookmarkedQuestionIds([]);

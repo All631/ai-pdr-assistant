@@ -13,3 +13,24 @@ export {
   ParkingSign,
   PublicTrafficSign,
 } from './TrafficSignIcons';
+
+export {
+  DangerousTurnSign,
+  CrossroadsSign,
+  GeneralDangerSign,
+  SteepDescentSign,
+  SteepAscentSign,
+  WildAnimalsSign,
+  RoadWorksSign,
+  SlipperyRoadSign,
+  EndOfMainRoadSign,
+  HospitalSign,
+  GasStationSign,
+  RestAreaSign,
+  DirectionSign,
+  RoundaboutSign,
+  StraightAheadSign,
+  TurnRightSign,
+  BusLaneSign,
+  BicycleLaneSign,
+} from './AdditionalSignIcons';
