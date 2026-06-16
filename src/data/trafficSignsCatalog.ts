@@ -15,12 +15,12 @@ export interface SignCatalogEntry {
 }
 
 export const SIGN_CATEGORIES: { id: SignCategoryId; label: string; hint: string }[] = [
-  { id: 'warning', label: 'Попереджувальні', hint: 'Трикутник, червона облямівка' },
-  { id: 'priority', label: 'Пріоритету', hint: 'STOP, дати дорогу, головна' },
-  { id: 'prohibitory', label: 'Заборонні', hint: 'Круг, червона облямівка' },
-  { id: 'mandatory', label: 'Наказові', hint: 'Круглий синій' },
-  { id: 'info', label: 'Інформаційні', hint: 'Сині/зелені прямокутники' },
-  { id: 'service', label: 'Сервісу', hint: 'Сині квадрати — послуги' },
+  { id: 'warning', label: 'Попереджувальні', hint: 'Трикутні, червона облямівка · ДСТУ 2.3.2' },
+  { id: 'priority', label: 'Знаки пріоритету', hint: 'STOP, дати дорогу, головна · ДСТУ 2.3.2' },
+  { id: 'prohibitory', label: 'Заборонні', hint: 'Круглі, червона облямівка · ДСТУ 2.3.2' },
+  { id: 'mandatory', label: 'Наказові', hint: 'Круглі сині · ДСТУ 2.3.2' },
+  { id: 'info', label: 'Інформаційні', hint: 'Сині/зелені квадрати · ДСТУ 2.3.2' },
+  { id: 'service', label: 'Знаки сервісу та таблички', hint: 'Послуги, таблички · ДСТУ 2.3.2' },
 ];
 
 export const TRAFFIC_SIGN_CATALOG: SignCatalogEntry[] = [
@@ -50,7 +50,7 @@ export const TRAFFIC_SIGN_CATALOG: SignCatalogEntry[] = [
   // Заборонні (10)
   { id: 'no-entry', code: '3.1', name: "В'їзд заборонено", description: "Заборона в'їзду всіх ТЗ.", category: 'prohibitory' },
   { id: 'no-overtaking', code: '3.20', name: 'Обгін заборонено', description: 'Заборона обгону транспортних засобів.', category: 'prohibitory' },
-  { id: 'no-left', code: '3.18', name: 'Поворот ліворuch заборонено', description: 'Заборона повороту ліворuch.', category: 'prohibitory' },
+  { id: 'no-left', code: '3.18', name: 'Поворот ліворуч заборонено', description: 'Заборона повороту ліворуч.', category: 'prohibitory' },
   { id: 'no-u-turn', code: '3.19', name: 'Розворот заборонено', description: 'Заборона розвороту на 180°.', category: 'prohibitory' },
   { id: 'speed-30', code: '3.29', name: '30 км/год', description: 'Обмеження максимальної швидкості.', category: 'prohibitory' },
   { id: 'speed-50', code: '3.29', name: '50 км/год', description: 'Обмеження в населеному пункті.', category: 'prohibitory' },
@@ -62,8 +62,8 @@ export const TRAFFIC_SIGN_CATALOG: SignCatalogEntry[] = [
 
   // Наказові (7)
   { id: 'straight', code: '4.1.1', name: 'Рух прямо', description: 'Дозволено лише прямий рух.', category: 'mandatory' },
-  { id: 'turn-right', code: '4.1.2', name: 'Поворот праворuch', description: 'Дозволено поворот праворuch.', category: 'mandatory' },
-  { id: 'turn-left', code: '4.1.2', name: 'Поворот ліворuch', description: 'Дозволено поворот ліворuch.', category: 'mandatory' },
+  { id: 'turn-right', code: '4.1.2', name: 'Поворот праворуч', description: 'Дозволено поворот праворуч.', category: 'mandatory' },
+  { id: 'turn-left', code: '4.1.2', name: 'Поворот ліворуч', description: 'Дозволено поворот ліворуч.', category: 'mandatory' },
   { id: 'roundabout-mandatory', code: '4.3', name: 'Круговий рух', description: 'Обов\'язковий рух у напрямку стрілок.', category: 'mandatory' },
   { id: 'bicycle-lane', code: '4.4.1', name: 'Велосипедна доріжка', description: 'Доріжка для велосипедистів.', category: 'mandatory' },
   { id: 'bus-lane', code: '5.14', name: 'Смуга автобусів', description: 'Виділена смуга для маршрутних ТЗ.', category: 'mandatory' },
@@ -92,4 +92,8 @@ export const TRAFFIC_SIGN_CATALOG: SignCatalogEntry[] = [
 
 export function getSignsByCategory(category: SignCategoryId): SignCatalogEntry[] {
   return TRAFFIC_SIGN_CATALOG.filter((s) => s.category === category);
+}
+
+export function getCategorySignCount(category: SignCategoryId): number {
+  return TRAFFIC_SIGN_CATALOG.filter((s) => s.category === category).length;
 }

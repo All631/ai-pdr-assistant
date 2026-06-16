@@ -3,6 +3,7 @@ import { SignRenderer } from '../../signs/SignRenderer';
 import {
   SIGN_CATEGORIES,
   TRAFFIC_SIGN_CATALOG,
+  getCategorySignCount,
   type SignCategoryId,
 } from '../../../data/trafficSignsCatalog';
 
@@ -29,35 +30,43 @@ export function SignGallery() {
   );
 
   const activeMeta = SIGN_CATEGORIES.find((c) => c.id === category)!;
+  const activeCount = filtered.length;
 
   return (
     <div className="space-y-5">
       <div className="flex flex-nowrap gap-2 overflow-x-auto pb-2 custom-scrollbar">
         {SIGN_CATEGORIES.map((cat) => {
-          const count = TRAFFIC_SIGN_CATALOG.filter((s) => s.category === cat.id).length;
+          const count = getCategorySignCount(cat.id);
+          const isActive = category === cat.id;
           return (
             <button
               key={cat.id}
               type="button"
               onClick={() => setCategory(cat.id)}
               className={`shrink-0 rounded-xl px-3 py-2 text-left transition-all sm:px-4 sm:py-2.5 ${
-                category === cat.id
-                  ? 'bg-blue-600 text-white shadow-sm'
-                  : 'bg-white border border-slate-100 text-slate-600 hover:bg-slate-50'
+                isActive
+                  ? 'bg-blue-600 text-white shadow-sm ring-2 ring-blue-300'
+                  : 'bg-white border border-slate-100 text-slate-600 hover:bg-slate-50 hover:border-slate-200'
               }`}
             >
-              <span className="block text-4xs sm:text-xs font-bold">{cat.label}</span>
-              <span className={`block text-4xs mt-0.5 ${category === cat.id ? 'text-blue-100' : 'text-slate-400'}`}>
-                {count} · {cat.hint}
+              <span className="block text-4xs sm:text-xs font-bold whitespace-nowrap">
+                {cat.label} ({count})
+              </span>
+              <span className={`block text-4xs mt-0.5 ${isActive ? 'text-blue-100' : 'text-slate-400'}`}>
+                {cat.hint}
               </span>
             </button>
           );
         })}
       </div>
 
-      <div className="rounded-xl bg-slate-50 border border-slate-100 px-4 py-3">
-        <p className="text-sm font-bold text-slate-800">{activeMeta.label}</p>
-        <p className="text-4xs text-slate-500 mt-0.5">{activeMeta.hint} · ДСТУ 4100</p>
+      <div className="rounded-xl bg-gradient-to-r from-slate-50 to-blue-50/40 border border-slate-100 px-4 py-3">
+        <p className="text-sm font-bold text-slate-800">
+          {activeMeta.label} ({activeCount})
+        </p>
+        <p className="text-4xs text-slate-500 mt-0.5">
+          {activeMeta.hint} · розділ 7 ПДР, ДСТУ 4100
+        </p>
       </div>
 
       <div className={GRID}>

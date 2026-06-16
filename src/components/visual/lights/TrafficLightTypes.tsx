@@ -67,8 +67,8 @@ export function ArrowSectionTrafficLight() {
       title="З додатковою секцією (стрілки)"
       description={
         arrowOn
-          ? 'Червоний основний + зелена стрілка: рух дозволено лише у напрямку стрілки, обов\'язково поступитися іншим ТЗ та пішоходам.'
-          : 'Лише червоний: рух заборонено у всіх напрямках, включно зі смугою стрілки.'
+          ? 'Червоний основний + зелена стрілка (п. 8.7.3): рух дозволено лише у напрямку стрілки. Водій зобов\'язаний дати дорогу транспортним засобам, що рухаються з інших напрямків, а також пішоходам, що переходять проїзну частину.'
+          : 'Лише червоний: рух заборонено у всіх напрямках, включно зі смугою додаткової секції.'
       }
       controls={
         <>
@@ -173,18 +173,17 @@ export function ReversibleTrafficLight() {
   );
 }
 
-type TramMode = 'stop' | 'straight' | 'left' | 'right' | 'top-only';
+type TramMode = 'forbidden' | 'straight' | 'left' | 'right';
 
 export function TramTrafficLight() {
   const uid = useLightUid();
-  const [mode, setMode] = useState<TramMode>('stop');
+  const [mode, setMode] = useState<TramMode>('forbidden');
 
   const lenses: Record<TramMode, [boolean, boolean, boolean, boolean]> = {
-    stop: [false, false, false, false],
+    forbidden: [true, true, true, false],
     straight: [true, false, false, true],
     left: [true, true, false, true],
     right: [false, false, true, true],
-    'top-only': [true, true, true, false],
   };
   const [top, left, right, bottom] = lenses[mode];
   const moon = '#f8fafc';
@@ -208,7 +207,7 @@ export function TramTrafficLight() {
       title="Т-подібний (трамвайний)"
       description={TRAM_LIGHT_DESCRIPTIONS[mode]}
       controls={
-        (['stop', 'straight', 'left', 'right', 'top-only'] as TramMode[]).map((m) => (
+        (['forbidden', 'straight', 'left', 'right'] as TramMode[]).map((m) => (
           <LightControlBtn
             key={m}
             active={mode === m}
@@ -236,16 +235,20 @@ export function TramTrafficLight() {
 
 export function TrafficLightsGallery() {
   return (
-    <div className="space-y-8">
-      <div>
-        <h4 className="text-xs font-bold uppercase tracking-wider text-slate-500 mb-3">Базовий триколірний</h4>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
-          <StandardTrafficLight />
-          <ArrowSectionTrafficLight />
-          <PedestrianTrafficLight />
-          <ReversibleTrafficLight />
-          <TramTrafficLight />
-        </div>
+    <div className="space-y-6">
+      <div className="rounded-xl border border-slate-100 bg-gradient-to-br from-slate-50 to-white px-4 py-3 sm:px-5 sm:py-4">
+        <p className="text-xs font-bold text-slate-800">5 інтерактивних моделей світлофорів</p>
+        <p className="mt-1 text-4xs leading-relaxed text-slate-500">
+          Натисніть кнопки під кожною моделлю, щоб перемикати сигнали. Активні лінзи мають ефект світіння (SVG glow + radial-gradient).
+          Корпуси з металевим градієнтом і козирками над лінзами.
+        </p>
+      </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-5 gap-4">
+        <StandardTrafficLight />
+        <ArrowSectionTrafficLight />
+        <PedestrianTrafficLight />
+        <ReversibleTrafficLight />
+        <TramTrafficLight />
       </div>
     </div>
   );
