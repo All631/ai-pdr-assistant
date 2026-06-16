@@ -5,6 +5,13 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import {
+  ASSET_OVERRIDES,
+  assetFileName,
+  buildWikiCandidates,
+  codeToAssetId,
+  extractSpeedKmh,
+} from './signAssetConfig.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
@@ -14,71 +21,23 @@ const MANIFEST_PATH = path.join(OUT_DIR, 'manifest.json');
 
 const USER_AGENT = 'ai-pdr-assistant/1.0 (educational; DSTU sign downloader; github.com/All631/ai-pdr-assistant)';
 const REQUEST_DELAY_MS = 2000;
-const MAX_DOWNLOAD_ATTEMPTS = 1;
-/** Download only the first N catalog entries (core set across all DSTU categories). */
-const DOWNLOAD_LIMIT = 45;
 
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-const WIKI_OVERRIDES = {
-  'speed-30': ['UA road sign 3.29-020.svg', 'UA_road_sign_3.29-020.svg'],
-  'speed-50': ['UA road sign 3.29-050.svg', 'UA_road_sign_3.29-050.svg'],
-  'speed-70': ['UA road sign 3.29-070.svg', 'UA_road_sign_3.29-070.svg'],
-  'speed-90': ['UA road sign 3.29-060.svg', 'UA_road_sign_3.29-060.svg'],
-  stop: ['UA road sign 2.2.svg', 'UA_road_sign_2.2.svg'],
-  'end-main-road': ['UA road sign 2.24.svg', 'UA_road_sign_2.24.svg'],
-  'turn-right': ['UA road sign 4.1.2.svg', 'UA_road_sign_4.1.2.svg'],
-  'turn-left': ['UA road sign 4.1.2-1.svg', 'UA_road_sign_4.1.2-1.svg'],
-  'living-zone': ['UA road sign 5.38-1.svg', 'UA_road_sign_5.38-1.svg'],
-  food: ['UA road sign 6.4-1.svg', 'UA_road_sign_6.4-1.svg'],
-  'min-speed-40': ['UA road sign 3.27-040.svg', 'UA_road_sign_3.27-040.svg'],
-  parking: ['UA road sign 6.4.svg', 'UA_road_sign_6.4.svg'],
-  'pedestrian-zone': ['UA road sign 5.38.svg', 'UA_road_sign_5.38.svg'],
-  children: ['UA road sign 1.23.1.svg', 'UA_road_sign_1.23.1.svg'],
-  railway: ['UA road sign 1.31.1.svg', 'UA_road_sign_1.31.1.svg', 'UA road sign 1.31.svg'],
-};
-
-const ASSET_OVERRIDES = {
-  'speed-30': '3_29_30',
-  'speed-50': '3_29_50',
-  'speed-70': '3_29_70',
-  'speed-90': '3_29_90',
-  stop: '2_2',
-  'end-main-road': '2_24',
-  'turn-right': '4_1_2',
-  'turn-left': '4_1_2_1',
-  'living-zone': '5_38_1',
-  food: '6_4_1',
-  parking: '6_4',
-  'pedestrian-zone': '5_38',
-  'min-speed-40': '3_27_40',
-};
-
 function parseCatalog(content) {
   const entries = [];
-  const re = /\{\s*id:\s*'([^']+)',\s*code:\s*'([^']+)'[\s\S]*?category:\s*'([^']+)'/g;
+  const re =
+    /\{\s*id:\s*'([^']+)',\s*code:\s*'([^']+)',\s*name:\s*(['"])((?:\\.|(?!\3).)*)\3[\s\S]*?category:\s*'([^']+)'/g;
   let m;
   while ((m = re.exec(content)) !== null) {
-    entries.push({ id: m[1], code: m[2], category: m[3], name: m[1] });
+    entries.push({
+      id: m[1],
+      code: m[2],
+      name: m[4].replace(/\\'/g, "'"),
+      category: m[5],
+    });
   }
   return entries;
-}
-
-export function codeToAssetId(code) {
-  return code.replace(/\./g, '_');
-}
-
-function assetFileName(signId, code) {
-  const base = ASSET_OVERRIDES[signId] ?? codeToAssetId(code);
-  return `${base}.svg`;
-}
-
-function wikiCandidates(signId, code) {
-  const list = [];
-  if (WIKI_OVERRIDES[signId]) list.push(...WIKI_OVERRIDES[signId]);
-  list.push(`UA road sign ${code}.svg`);
-  list.push(`UA_road_sign_${code}.svg`);
-  return [...new Set(list)];
 }
 
 function isValidSvgFile(filePath) {
@@ -92,51 +51,122 @@ function isValidSvgFile(filePath) {
 
 async function fetchSvgFromCommons(wikiFileName) {
   const url = `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(wikiFileName)}`;
+  try {
+    const res = await fetch(url, {
+      headers: { 'User-Agent': USER_AGENT },
+      redirect: 'follow',
+    });
+    if (res.status === 429 || !res.ok) return null;
+    const text = await res.text();
+    if (!text.includes('<svg') && !text.includes('<SVG')) return null;
+    return text;
+  } catch {
+    return null;
+  }
+}
 
-  for (let attempt = 1; attempt <= MAX_DOWNLOAD_ATTEMPTS; attempt++) {
-    try {
-      const res = await fetch(url, {
-        headers: { 'User-Agent': USER_AGENT },
-        redirect: 'follow',
-      });
+function titleMatchesEntry(title, entry) {
+  const base = title
+    .replace(/^UA road sign /, '')
+    .replace(/^UA_road_sign_/, '')
+    .replace(/\.svg$/i, '');
 
-      if (res.status === 429) return null;
-      if (!res.ok) return null;
-
-      const text = await res.text();
-      if (!text.includes('<svg') && !text.includes('<SVG')) return null;
-      return text;
-    } catch {
-      return null;
-    }
+  const speed = extractSpeedKmh(entry.id, entry.name);
+  if (entry.code === '3.29' && speed) {
+    const pad3 = String(speed).padStart(3, '0');
+    return base === `3.29-${pad3}` || base === `3.29-${speed}`;
+  }
+  if (entry.code === '3.27' && speed) {
+    const pad3 = String(speed).padStart(3, '0');
+    return base === `3.27-${pad3}` || base === '3.27';
   }
 
-  return null;
+  return base === entry.code || base.startsWith(`${entry.code}-`) || base.startsWith(`${entry.code}.`);
+}
+
+async function searchCommonsCandidates(entry) {
+  const query = encodeURIComponent(`"UA road sign ${entry.code}"`);
+  const apiUrl =
+    `https://commons.wikimedia.org/w/api.php?action=query&list=search` +
+    `&srsearch=${query}&srnamespace=6&format=json&origin=*&srlimit=12`;
+
+  try {
+    await delay(REQUEST_DELAY_MS);
+    const res = await fetch(apiUrl, { headers: { 'User-Agent': USER_AGENT } });
+    if (!res.ok) return [];
+    const data = await res.json();
+    return (data.query?.search ?? [])
+      .map((hit) => hit.title.replace(/^File:/, ''))
+      .filter(
+        (title) =>
+          (title.startsWith('UA road sign') || title.startsWith('UA_road_sign')) &&
+          title.endsWith('.svg') &&
+          titleMatchesEntry(title, entry)
+      );
+  } catch {
+    return [];
+  }
 }
 
 async function downloadSign(entry) {
-  const candidates = wikiCandidates(entry.id, entry.code);
+  const candidates = buildWikiCandidates(entry);
 
   for (const wikiName of candidates) {
     const svg = await fetchSvgFromCommons(wikiName);
     await delay(REQUEST_DELAY_MS);
-    if (svg) return { wikiName, svg };
+    if (svg) return { wikiName, svg, source: 'pattern' };
+  }
+
+  const searched = await searchCommonsCandidates(entry);
+  for (const wikiName of searched) {
+    if (candidates.includes(wikiName)) continue;
+    const svg = await fetchSvgFromCommons(wikiName);
+    await delay(REQUEST_DELAY_MS);
+    if (svg) return { wikiName, svg, source: 'search' };
   }
 
   return null;
 }
 
+function auditCatalog(catalog) {
+  const missing = [];
+  const present = [];
+  for (const entry of catalog) {
+    const file = assetFileName(entry.id, entry.code);
+    const dest = path.join(OUT_DIR, file);
+    if (isValidSvgFile(dest)) present.push(entry);
+    else missing.push(entry);
+  }
+  return { missing, present };
+}
+
 async function main() {
   const catalogContent = fs.readFileSync(CATALOG_PATH, 'utf8');
-  const catalog = parseCatalog(catalogContent).slice(0, DOWNLOAD_LIMIT);
+  const catalog = parseCatalog(catalogContent);
 
   fs.mkdirSync(OUT_DIR, { recursive: true });
+
+  const { missing, present } = auditCatalog(catalog);
+  console.log(`Catalog audit: ${catalog.length} signs, ${present.length} on disk, ${missing.length} missing\n`);
+
+  if (missing.length) {
+    console.log('Missing assets:');
+    for (const e of missing) {
+      console.log(`  - ${e.id} (${e.code}) -> ${assetFileName(e.id, e.code)}`);
+    }
+    console.log('');
+  }
 
   const manifest = {
     generatedAt: new Date().toISOString(),
     source: 'Wikimedia Commons (UA road signs, DSTU 4100)',
-    downloadLimit: DOWNLOAD_LIMIT,
     requestDelayMs: REQUEST_DELAY_MS,
+    patterns: [
+      '3.29 speed: UA road sign 3.29-{NNN}.svg (3-digit pad)',
+      '3.27 min speed: UA road sign 3.27-{NNN}.svg',
+      '1.13/1.14 grade: UA road sign 1.13.svg or 1.13-{pct}.svg',
+      'Sub-variants: 1.23.1, 1.31.1, 4.1.2-1, 5.38-1, 6.4-1',
+    ],
     signs: [],
   };
 
@@ -144,7 +174,7 @@ async function main() {
   let skipped = 0;
   let fail = 0;
 
-  console.log(`Downloading up to ${catalog.length} core signs to ${OUT_DIR}`);
+  console.log(`Downloading missing signs to ${OUT_DIR}`);
   console.log(`Delay between requests: ${REQUEST_DELAY_MS}ms\n`);
 
   for (const entry of catalog) {
@@ -184,7 +214,7 @@ async function main() {
     }
 
     fs.writeFileSync(dest, result.svg, 'utf8');
-    console.log(`OK (${result.wikiName})`);
+    console.log(`OK (${result.wikiName}, ${result.source})`);
     ok++;
     manifest.signs.push({
       id: entry.id,
@@ -193,6 +223,7 @@ async function main() {
       file: fileName,
       assetId: ASSET_OVERRIDES[entry.id] ?? codeToAssetId(entry.code),
       wikiName: result.wikiName,
+      source: result.source,
       ok: true,
     });
   }
