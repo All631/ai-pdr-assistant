@@ -1,5 +1,10 @@
 import React, { useId } from 'react';
-import type { ApproachSide, RegulatorGestureId } from '../../../data/regulatorGesturesData';
+import type {
+  ApproachRule,
+  ApproachSide,
+  RegulatorGestureId,
+  VehicleMove,
+} from '../../../data/regulatorGesturesData';
 
 const NPU_BLUE = '#0c1f3d';
 const NPU_BLUE_LIGHT = '#1e3a5f';
@@ -8,7 +13,6 @@ const VEST_STRIPE = '#fef08a';
 
 interface PoliceOfficerSvgProps {
   gesture: RegulatorGestureId;
-  /** Який бік регулювальника бачить спостерігач (водій) */
   viewSide: ApproachSide;
   className?: string;
 }
@@ -16,9 +20,9 @@ interface PoliceOfficerSvgProps {
 function Baton({ x, y, angle }: { x: number; y: number; angle: number }) {
   return (
     <g transform={`translate(${x} ${y}) rotate(${angle})`}>
-      <rect x="-3" y="0" width="6" height="42" rx="2" fill="#fef08a" stroke="#ca8a04" strokeWidth="0.5" />
-      {[0, 14, 28].map((off, i) => (
-        <rect key={i} x="-3" y={off} width="6" height="14" rx="1" fill={i % 2 === 0 ? '#dc2626' : '#fef08a'} />
+      <rect x="-3.5" y="0" width="7" height="44" rx="2" fill="#fef08a" stroke="#ca8a04" strokeWidth="0.6" />
+      {[0, 11, 22, 33].map((off, i) => (
+        <rect key={i} x="-3.5" y={off} width="7" height="11" rx="1" fill={i % 2 === 0 ? '#dc2626' : '#fef08a'} />
       ))}
     </g>
   );
@@ -27,20 +31,25 @@ function Baton({ x, y, angle }: { x: number; y: number; angle: number }) {
 function Cockade({ cx, cy }: { cx: number; cy: number }) {
   return (
     <g>
-      <circle cx={cx} cy={cy} r="7" fill="#1e40af" stroke="#fbbf24" strokeWidth="1.5" />
-      <path d={`M${cx} ${cy - 4} L${cx + 3} ${cy + 3} L${cx - 3} ${cy + 3} Z`} fill="#fbbf24" />
+      <circle cx={cx} cy={cy} r="8" fill="#1e40af" stroke="#fbbf24" strokeWidth="1.8" />
+      <circle cx={cx} cy={cy} r="4.5" fill="#fbbf24" opacity="0.9" />
+      <path
+        d={`M${cx} ${cy - 5} L${cx + 4} ${cy + 4} L${cx - 4} ${cy + 4} Z`}
+        fill="#1e40af"
+        stroke="#fbbf24"
+        strokeWidth="0.5"
+      />
     </g>
   );
 }
 
-/** Деталізована фігура поліцейського НПУ */
 export function PoliceOfficerSvg({ gesture, viewSide, className = '' }: PoliceOfficerSvgProps) {
   const uid = useId().replace(/:/g, '');
-
-  const facing = viewSide === 'chest' ? 'front' : viewSide === 'back' ? 'back' : viewSide === 'left' ? 'left' : 'right';
+  const facing =
+    viewSide === 'chest' ? 'front' : viewSide === 'back' ? 'back' : viewSide === 'left' ? 'left' : 'right';
 
   return (
-    <svg viewBox="0 0 160 220" className={className} role="img" aria-label="Регулювальник НПУ">
+    <svg viewBox="0 0 180 240" className={className} role="img" aria-label="Регулювальник НПУ">
       <defs>
         <linearGradient id={`uniform-${uid}`} x1="0%" y1="0%" x2="100%" y2="0%">
           <stop offset="0%" stopColor={NPU_BLUE} />
@@ -52,56 +61,42 @@ export function PoliceOfficerSvg({ gesture, viewSide, className = '' }: PoliceOf
           <stop offset="100%" stopColor={VEST_ORANGE} />
         </linearGradient>
         <filter id={`shadow-${uid}`}>
-          <feDropShadow dx="0" dy="2" stdDeviation="2" floodOpacity="0.25" />
+          <feDropShadow dx="0" dy="2" stdDeviation="2.5" floodOpacity="0.22" />
         </filter>
       </defs>
 
-      {/* Ground shadow */}
-      <ellipse cx="80" cy="210" rx="35" ry="6" fill="#000" opacity="0.15" />
+      <ellipse cx="90" cy="228" rx="38" ry="7" fill="#000" opacity="0.12" />
 
-      {/* Legs & boots */}
+      {/* Legs */}
       <g filter={`url(#shadow-${uid})`}>
-        <rect x="58" y="155" width="18" height="48" rx="4" fill={NPU_BLUE} />
-        <rect x="84" y="155" width="18" height="48" rx="4" fill={NPU_BLUE} />
-        <rect x="54" y="195" width="26" height="10" rx="3" fill="#0a0a0a" />
-        <rect x="80" y="195" width="26" height="10" rx="3" fill="#0a0a0a" />
-        <rect x="56" y="198" width="22" height="4" rx="1" fill="#374151" />
-        <rect x="82" y="198" width="22" height="4" rx="1" fill="#374151" />
+        <rect x="64" y="168" width="20" height="52" rx="5" fill={NPU_BLUE} />
+        <rect x="96" y="168" width="20" height="52" rx="5" fill={NPU_BLUE} />
+        <rect x="60" y="212" width="28" height="12" rx="4" fill="#111" />
+        <rect x="92" y="212" width="28" height="12" rx="4" fill="#111" />
+        <rect x="62" y="216" width="24" height="5" rx="1" fill="#475569" />
+        <rect x="94" y="216" width="24" height="5" rx="1" fill="#475569" />
       </g>
 
-      {/* Torso — varies by facing */}
+      {/* Torso */}
       {(facing === 'front' || facing === 'back') && (
         <g filter={`url(#shadow-${uid})`}>
-          {/* Uniform jacket */}
-          <path
-            d="M45 95 L115 95 L108 158 L52 158 Z"
-            fill={`url(#uniform-${uid})`}
-            stroke="#081528"
-            strokeWidth="1"
-          />
-          {/* Reflective vest */}
-          <path
-            d="M48 98 L112 98 L106 152 L54 152 Z"
-            fill={`url(#vest-${uid})`}
-            stroke="#c2410c"
-            strokeWidth="0.8"
-          />
-          {/* Vest stripes */}
-          {[108, 118, 128, 138].map((y) => (
-            <rect key={y} x="52" y={y} width="56" height="4" rx="1" fill={VEST_STRIPE} opacity="0.95" />
+          <path d="M48 108 L132 108 L124 172 L56 172 Z" fill={`url(#uniform-${uid})`} stroke="#081528" strokeWidth="1" />
+          <path d="M52 112 L128 112 L122 166 L58 166 Z" fill={`url(#vest-${uid})`} stroke="#c2410c" strokeWidth="0.8" />
+          {[118, 128, 138, 148].map((y) => (
+            <rect key={y} x="56" y={y} width="68" height="5" rx="1.5" fill={VEST_STRIPE} opacity="0.95" />
           ))}
           {facing === 'front' && (
             <>
-              <text x="80" y="125" fontSize="11" textAnchor="middle" fill="white" fontWeight="bold" fontFamily="Arial,sans-serif">
+              <text x="90" y="138" fontSize="12" textAnchor="middle" fill="white" fontWeight="bold" fontFamily="Arial,sans-serif">
                 ПОЛІЦІЯ
               </text>
-              {/* Shoulder patches */}
-              <rect x="46" y="96" width="14" height="10" rx="2" fill={NPU_BLUE_LIGHT} />
-              <rect x="100" y="96" width="14" height="10" rx="2" fill={NPU_BLUE_LIGHT} />
+              <rect x="50" y="110" width="16" height="12" rx="2" fill={NPU_BLUE_LIGHT} stroke="#fbbf24" strokeWidth="0.5" />
+              <rect x="114" y="110" width="16" height="12" rx="2" fill={NPU_BLUE_LIGHT} stroke="#fbbf24" strokeWidth="0.5" />
+              <rect x="72" y="158" width="36" height="8" rx="2" fill="#111" opacity="0.85" />
             </>
           )}
           {facing === 'back' && (
-            <text x="80" y="125" fontSize="10" textAnchor="middle" fill="white" fontWeight="bold" fontFamily="Arial,sans-serif">
+            <text x="90" y="138" fontSize="11" textAnchor="middle" fill="white" fontWeight="bold" fontFamily="Arial,sans-serif">
               ПОЛІЦІЯ
             </text>
           )}
@@ -110,83 +105,70 @@ export function PoliceOfficerSvg({ gesture, viewSide, className = '' }: PoliceOf
 
       {facing === 'left' && (
         <g filter={`url(#shadow-${uid})`}>
-          <path d="M70 95 L110 95 L105 158 L65 158 Z" fill={`url(#uniform-${uid})`} />
-          <path d="M72 98 L108 98 L104 152 L68 152 Z" fill={`url(#vest-${uid})`} />
-          {[108, 118, 128].map((y) => (
-            <rect key={y} x="70" y={y} width="36" height="4" rx="1" fill={VEST_STRIPE} />
+          <path d="M78 108 L124 108 L118 172 L72 172 Z" fill={`url(#uniform-${uid})`} />
+          <path d="M80 112 L122 112 L117 166 L75 166 Z" fill={`url(#vest-${uid})`} />
+          {[118, 130, 142].map((y) => (
+            <rect key={y} x="78" y={y} width="40" height="5" rx="1" fill={VEST_STRIPE} />
           ))}
-          <text x="88" y="122" fontSize="8" textAnchor="middle" fill="white" fontWeight="bold" transform="rotate(-90 88 122)">
-            ПОЛІЦІЯ
-          </text>
         </g>
       )}
 
       {facing === 'right' && (
         <g filter={`url(#shadow-${uid})`}>
-          <path d="M50 95 L90 95 L95 158 L55 158 Z" fill={`url(#uniform-${uid})`} />
-          <path d="M52 98 L88 98 L92 152 L56 152 Z" fill={`url(#vest-${uid})`} />
-          {[108, 118, 128].map((y) => (
-            <rect key={y} x="54" y={y} width="36" height="4" rx="1" fill={VEST_STRIPE} />
+          <path d="M56 108 L102 108 L108 172 L62 172 Z" fill={`url(#uniform-${uid})`} />
+          <path d="M58 112 L100 112 L105 166 L63 166 Z" fill={`url(#vest-${uid})`} />
+          {[118, 130, 142].map((y) => (
+            <rect key={y} x="62" y={y} width="40" height="5" rx="1" fill={VEST_STRIPE} />
           ))}
-          <text x="72" y="122" fontSize="8" textAnchor="middle" fill="white" fontWeight="bold" transform="rotate(90 72 122)">
-            ПОЛІЦІЯ
-          </text>
         </g>
       )}
 
       {/* Arms by gesture */}
-      {gesture === 'stop' && facing === 'front' && (
+      {gesture === 'stop' && (
         <>
-          <path d="M48 100 L30 55 L38 50 L52 88 Z" fill={NPU_BLUE_LIGHT} stroke="#081528" strokeWidth="0.5" />
-          <circle cx="32" cy="48" r="7" fill="#fcd9b6" />
-          <path d="M112 100 L130 55 L122 50 L108 88 Z" fill={NPU_BLUE_LIGHT} stroke="#081528" strokeWidth="0.5" />
-          <circle cx="128" cy="48" r="7" fill="#fcd9b6" />
-        </>
-      )}
-      {gesture === 'stop' && facing === 'back' && (
-        <>
-          <path d="M48 100 L28 58 L36 52 L52 90 Z" fill={NPU_BLUE_LIGHT} />
-          <path d="M112 100 L132 58 L124 52 L108 90 Z" fill={NPU_BLUE_LIGHT} />
-        </>
-      )}
-      {gesture === 'stop' && (facing === 'left' || facing === 'right') && (
-        <>
-          <path d="M75 98 L75 45 L85 45 L85 98 Z" fill={NPU_BLUE_LIGHT} rx="4" />
-          <circle cx="80" cy="40" r="6" fill="#fcd9b6" />
+          {(facing === 'front' || facing === 'back') && (
+            <>
+              <path d="M52 112 L28 52 L38 46 L56 98 Z" fill={NPU_BLUE_LIGHT} stroke="#081528" strokeWidth="0.5" />
+              <circle cx="30" cy="44" r="8" fill="#fcd9b6" stroke="#d4a574" strokeWidth="0.5" />
+              <path d="M128 112 L152 52 L142 46 L124 98 Z" fill={NPU_BLUE_LIGHT} stroke="#081528" strokeWidth="0.5" />
+              <circle cx="150" cy="44" r="8" fill="#fcd9b6" stroke="#d4a574" strokeWidth="0.5" />
+            </>
+          )}
+          {(facing === 'left' || facing === 'right') && (
+            <>
+              <path d="M82 110 L82 38 L98 38 L98 110 Z" fill={NPU_BLUE_LIGHT} rx="4" />
+              <circle cx="90" cy="32" r="7" fill="#fcd9b6" />
+            </>
+          )}
         </>
       )}
 
       {gesture === 'arms-out' && (
         <>
-          <rect x="8" y="108" width="42" height="12" rx="5" fill={NPU_BLUE_LIGHT} stroke="#081528" strokeWidth="0.5" />
-          <circle cx="6" cy="114" r="7" fill="#fcd9b6" />
-          <rect x="110" y="108" width="42" height="12" rx="5" fill={NPU_BLUE_LIGHT} stroke="#081528" strokeWidth="0.5" />
-          <circle cx="154" cy="114" r="7" fill="#fcd9b6" />
-          <Baton x={148} y={108} angle={-15} />
+          <rect x="4" y="122" width="48" height="14" rx="6" fill={NPU_BLUE_LIGHT} stroke="#081528" strokeWidth="0.5" />
+          <circle cx="4" cy="129" r="8" fill="#fcd9b6" />
+          <rect x="128" y="122" width="48" height="14" rx="6" fill={NPU_BLUE_LIGHT} stroke="#081528" strokeWidth="0.5" />
+          <circle cx="176" cy="129" r="8" fill="#fcd9b6" />
+          <Baton x={168} y={118} angle={-12} />
         </>
       )}
 
       {gesture === 'arm-forward' && facing !== 'back' && (
         <>
-          <rect x="55" y="108" width="12" height="38" rx="5" fill={NPU_BLUE_LIGHT} />
-          <circle cx="61" cy="150" r="6" fill="#fcd9b6" />
-          {facing === 'front' && (
+          <rect x="58" y="120" width="14" height="42" rx="6" fill={NPU_BLUE_LIGHT} />
+          <circle cx="65" cy="166" r="7" fill="#fcd9b6" />
+          {(facing === 'front' || facing === 'right') && (
             <>
-              <rect x="95" y="108" width="48" height="12" rx="5" fill={NPU_BLUE_LIGHT} />
-              <circle cx="146" cy="114" r="7" fill="#fcd9b6" />
-              <Baton x={142} y={100} angle={10} />
+              <rect x="108" y="120" width="54" height="14" rx="6" fill={NPU_BLUE_LIGHT} />
+              <circle cx="166" cy="127" r="8" fill="#fcd9b6" />
+              <Baton x={160} y={108} angle={8} />
             </>
           )}
           {facing === 'left' && (
             <>
-              <rect x="95" y="112" width="40" height="10" rx="5" fill={NPU_BLUE_LIGHT} />
-              <Baton x={130} y={105} angle={5} />
-            </>
-          )}
-          {facing === 'right' && (
-            <>
-              <rect x="25" y="112" width="40" height="10" rx="5" fill={NPU_BLUE_LIGHT} />
-              <circle cx="22" cy="117" r="6" fill="#fcd9b6" />
+              <rect x="118" y="124" width="46" height="12" rx="6" fill={NPU_BLUE_LIGHT} />
+              <circle cx="168" cy="130" r="7" fill="#fcd9b6" />
+              <Baton x={162} y={112} angle={5} />
             </>
           )}
         </>
@@ -194,93 +176,189 @@ export function PoliceOfficerSvg({ gesture, viewSide, className = '' }: PoliceOf
 
       {gesture === 'arm-forward' && facing === 'back' && (
         <>
-          <rect x="55" y="108" width="12" height="38" rx="5" fill={NPU_BLUE_LIGHT} />
-          <rect x="93" y="108" width="12" height="38" rx="5" fill={NPU_BLUE_LIGHT} />
+          <rect x="58" y="120" width="14" height="42" rx="6" fill={NPU_BLUE_LIGHT} />
+          <rect x="108" y="120" width="14" height="42" rx="6" fill={NPU_BLUE_LIGHT} />
         </>
       )}
 
       {/* Head & cap */}
       <g filter={`url(#shadow-${uid})`}>
-        <circle cx="80" cy="72" r="18" fill="#fcd9b6" stroke="#d4a574" strokeWidth="0.8" />
-        {/* Cap */}
-        <ellipse cx="80" cy="58" rx="22" ry="8" fill={NPU_BLUE} />
-        <rect x="58" y="52" width="44" height="12" rx="3" fill={NPU_BLUE} />
-        <path d="M58 58 L102 58 L100 64 L60 64 Z" fill="#1e40af" />
-        {(facing === 'front' || facing === 'left' || facing === 'right') && <Cockade cx={80} cy={54} />}
-        {facing === 'back' && (
-          <rect x="68" y="50" width="24" height="8" rx="2" fill={NPU_BLUE_LIGHT} />
-        )}
-        {/* Face details (front/sides) */}
+        <circle cx="90" cy="82" r="20" fill="#fcd9b6" stroke="#d4a574" strokeWidth="0.8" />
+        <ellipse cx="90" cy="66" rx="24" ry="9" fill={NPU_BLUE} />
+        <rect x="66" y="58" width="48" height="14" rx="4" fill={NPU_BLUE} />
+        <path d="M66 66 L114 66 L112 74 L68 74 Z" fill="#1e40af" />
+        <rect x="64" y="72" width="52" height="6" rx="2" fill="#0a0a0a" opacity="0.7" />
+        {(facing === 'front' || facing === 'left' || facing === 'right') && <Cockade cx={90} cy={62} />}
         {facing === 'front' && (
           <>
-            <circle cx="73" cy="70" r="2" fill="#1e293b" />
-            <circle cx="87" cy="70" r="2" fill="#1e293b" />
+            <circle cx="82" cy="80" r="2.2" fill="#1e293b" />
+            <circle cx="98" cy="80" r="2.2" fill="#1e293b" />
           </>
         )}
       </g>
 
-      {/* Direction badge */}
-      <rect x="4" y="4" width="52" height="16" rx="4" fill="#1e293b" opacity="0.85" />
-      <text x="30" y="15" fontSize="7" textAnchor="middle" fill="white" fontWeight="bold">
+      <rect x="6" y="6" width="58" height="18" rx="5" fill="#1e293b" opacity="0.9" />
+      <text x="35" y="18" fontSize="8" textAnchor="middle" fill="white" fontWeight="bold">
         {viewSide === 'chest' ? 'ГРУДИ' : viewSide === 'back' ? 'СПИНА' : viewSide === 'left' ? 'ЛІВО' : 'ПРАВО'}
       </text>
     </svg>
   );
 }
 
+/** Map allowed moves to arrow endpoints relative to approach direction (view from above). */
+function moveArrows(
+  approachSide: ApproachSide,
+  allowed: VehicleMove[]
+): Array<{ x1: number; y1: number; x2: number; y2: number; move: VehicleMove }> {
+  const base: Record<ApproachSide, Record<VehicleMove, [number, number, number, number]>> = {
+    chest: {
+      straight: [100, 175, 100, 115],
+      right: [100, 175, 155, 130],
+      left: [100, 175, 45, 130],
+      'u-turn': [100, 175, 55, 175],
+    },
+    back: {
+      straight: [100, 25, 100, 85],
+      right: [100, 25, 155, 70],
+      left: [100, 25, 45, 70],
+      'u-turn': [100, 25, 145, 25],
+    },
+    left: {
+      straight: [25, 100, 85, 100],
+      right: [25, 100, 70, 155],
+      left: [25, 100, 70, 45],
+      'u-turn': [25, 100, 25, 145],
+    },
+    right: {
+      straight: [175, 100, 115, 100],
+      right: [175, 100, 130, 45],
+      left: [175, 100, 130, 155],
+      'u-turn': [175, 100, 175, 55],
+    },
+  };
+
+  return allowed.map((move) => {
+    const [x1, y1, x2, y2] = base[approachSide][move];
+    return { x1, y1, x2, y2, move };
+  });
+}
+
 interface ApproachDiagramProps {
-  approachSide: ApproachSide;
-  allowed: boolean;
+  approach: ApproachRule;
   className?: string;
 }
 
-/** Вид зверху: перехрестя, регулювальник, стрілка підходу */
-export function ApproachDiagram({ approachSide, allowed, className = '' }: ApproachDiagramProps) {
-  const arrowPaths: Record<ApproachSide, { x1: number; y1: number; x2: number; y2: number; label: string }> = {
-    chest: { x1: 100, y1: 175, x2: 100, y2: 130, label: 'Ви' },
-    back: { x1: 100, y1: 25, x2: 100, y2: 70, label: 'Ви' },
-    left: { x1: 25, y1: 100, x2: 70, y2: 100, label: 'Ви' },
-    right: { x1: 175, y1: 100, x2: 130, y2: 100, label: 'Ви' },
+export function ApproachDiagram({ approach, className = '' }: ApproachDiagramProps) {
+  const uid = useId().replace(/:/g, '');
+  const zoneColor = approach.allowed ? '#16a34a' : '#dc2626';
+  const arrows = moveArrows(approach.side, approach.vehicles.allowed);
+
+  const approachPaths: Record<ApproachSide, { x1: number; y1: number; x2: number; y2: number }> = {
+    chest: { x1: 100, y1: 188, x2: 100, y2: 128 },
+    back: { x1: 100, y1: 12, x2: 100, y2: 72 },
+    left: { x1: 12, y1: 100, x2: 72, y2: 100 },
+    right: { x1: 188, y1: 100, x2: 128, y2: 100 },
   };
-  const arr = arrowPaths[approachSide];
-  const zoneColor = allowed ? '#22c55e' : '#ef4444';
+  const arr = approachPaths[approach.side];
 
   return (
-    <svg viewBox="0 0 200 200" className={className} role="img">
-      <rect width="200" height="200" fill="#e2e8f0" rx="8" />
-      {/* Roads */}
-      <rect x="70" y="0" width="60" height="200" fill="#475569" />
-      <rect x="0" y="70" width="200" height="60" fill="#475569" />
-      {/* Crosswalk hints */}
-      <g opacity="0.3">
-        {Array.from({ length: 5 }).map((_, i) => (
-          <rect key={`h${i}`} x={75 + i * 10} y="68" width="5" height="64" fill="white" />
+    <svg viewBox="0 0 200 200" className={className} role="img" aria-label={approach.label}>
+      <rect width="200" height="200" fill="#cbd5e1" rx="10" />
+      <rect x="72" y="0" width="56" height="200" fill="#475569" />
+      <rect x="0" y="72" width="200" height="56" fill="#475569" />
+      <rect x="88" y="88" width="24" height="24" fill="#64748b" rx="2" />
+
+      {/* Crosswalk stripes */}
+      <g opacity="0.35">
+        {Array.from({ length: 6 }).map((_, i) => (
+          <rect key={`v${i}`} x={76 + i * 8} y="68" width="4" height="64" fill="white" />
+        ))}
+        {Array.from({ length: 6 }).map((_, i) => (
+          <rect key={`h${i}`} x="68" y={76 + i * 8} width="64" height="4" fill="white" />
         ))}
       </g>
-      {/* Officer (top-down) */}
-      <circle cx="100" cy="100" r="14" fill={VEST_ORANGE} stroke={NPU_BLUE} strokeWidth="2" />
-      <circle cx="100" cy="100" r="6" fill={NPU_BLUE} />
-      {/* Chest indicator (front) */}
-      <text x="100" y="118" fontSize="6" textAnchor="middle" fill="white" fontWeight="bold">
-        ГРУДИ
+
+      {/* Officer top-down with orientation */}
+      <circle cx="100" cy="100" r="16" fill={VEST_ORANGE} stroke={NPU_BLUE} strokeWidth="2.5" />
+      <circle cx="100" cy="100" r="7" fill={NPU_BLUE} />
+      <polygon
+        points={
+          approach.side === 'chest'
+            ? '100,118 92,104 108,104'
+            : approach.side === 'back'
+              ? '100,82 92,96 108,96'
+              : approach.side === 'left'
+                ? '82,100 96,92 96,108'
+                : '118,100 104,92 104,108'
+        }
+        fill="#fef08a"
+      />
+
+      {/* Allowed movement arrows (green) */}
+      {arrows.map(({ x1, y1, x2, y2, move }) => (
+        <g key={move}>
+          <line
+            x1={x1}
+            y1={y1}
+            x2={x2}
+            y2={y2}
+            stroke="#16a34a"
+            strokeWidth="4"
+            strokeLinecap="round"
+            markerEnd={`url(#arrow-green-${uid})`}
+            opacity="0.9"
+          />
+        </g>
+      ))}
+
+      {/* Your approach arrow (blue) */}
+      <line
+        x1={arr.x1}
+        y1={arr.y1}
+        x2={arr.x2}
+        y2={arr.y2}
+        stroke="#2563eb"
+        strokeWidth="3.5"
+        strokeDasharray="6 3"
+        markerEnd={`url(#arrow-blue-${uid})`}
+      />
+      <text
+        x={arr.x1 + (approach.side === 'left' ? -8 : approach.side === 'right' ? 8 : 0)}
+        y={arr.y1 + (approach.side === 'chest' ? 14 : approach.side === 'back' ? -8 : 0)}
+        fontSize="9"
+        textAnchor="middle"
+        fill="#2563eb"
+        fontWeight="bold"
+      >
+        Ви
       </text>
-      <text x="100" y="88" fontSize="6" textAnchor="middle" fill="#94a3b8">
-        СПИНА
-      </text>
-      {/* Approach arrow */}
-      <line x1={arr.x1} y1={arr.y1} x2={arr.x2} y2={arr.y2} stroke={zoneColor} strokeWidth="4" markerEnd="url(#arrowhead)" />
+
       <defs>
-        <marker id="arrowhead" markerWidth="8" markerHeight="6" refX="6" refY="3" orient="auto">
-          <polygon points="0 0, 8 3, 0 6" fill={zoneColor} />
+        <marker id={`arrow-green-${uid}`} markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+          <polygon points="0 0, 8 3, 0 6" fill="#16a34a" />
+        </marker>
+        <marker id={`arrow-blue-${uid}`} markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+          <polygon points="0 0, 8 3, 0 6" fill="#2563eb" />
         </marker>
       </defs>
-      <text x={arr.x1} y={arr.y1 + (approachSide === 'chest' ? 14 : approachSide === 'back' ? -6 : 0)} fontSize="8" textAnchor="middle" fill={zoneColor} fontWeight="bold">
-        {arr.label}
-      </text>
+
       {/* Status badge */}
-      <rect x="130" y="8" width="62" height="18" rx="4" fill={zoneColor} />
-      <text x="161" y="20" fontSize="8" textAnchor="middle" fill="white" fontWeight="bold">
-        {allowed ? 'ДОЗВОЛЕНО' : 'ЗАБОРОНЕНО'}
+      <rect x="8" y="8" width="78" height="20" rx="5" fill={zoneColor} />
+      <text x="47" y="22" fontSize="9" textAnchor="middle" fill="white" fontWeight="bold">
+        {approach.allowed ? 'ДОЗВОЛЕНО' : 'ЗАБОРОНЕНО'}
+      </text>
+
+      {/* Pedestrian mini-badge */}
+      <rect
+        x="114"
+        y="8"
+        width="78"
+        height="20"
+        rx="5"
+        fill={approach.pedestrians.allowed ? '#059669' : '#64748b'}
+      />
+      <text x="153" y="22" fontSize="7.5" textAnchor="middle" fill="white" fontWeight="bold">
+        {approach.pedestrians.allowed ? 'ПІШОХОДИ ✓' : 'ПІШОХОДИ ✗'}
       </text>
     </svg>
   );
