@@ -53,15 +53,8 @@ export function getSignImageSrcByCode(code: string): string {
 
 export function getSignImageCandidates(signId: string, code?: string): string[] {
   const primary = getSignAssetId(signId, code);
-  const paths: string[] = [`/images/signs/${primary}.svg`];
-
-  if (code) {
-    const codePath = `/images/signs/${codeToAssetId(code)}.svg`;
-    if (!paths.includes(codePath)) paths.push(codePath);
-  }
-
-  const legacyId = `/images/signs/${signId}.svg`;
-  if (!paths.includes(legacyId)) paths.push(legacyId);
-
-  return paths;
+  return [`/images/signs/${primary}.svg`];
 }
+
+/** Bump after sign asset or catalog changes to bust CDN/browser cache on Vercel. */
+export const SIGN_ASSET_CACHE_BUST = '20250614-dstu';

@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { TRAFFIC_SIGN_CATALOG, type SignCategoryId } from '../../data/trafficSignsCatalog';
-import { getSignImageCandidates } from './signAssets';
+import { getSignImageCandidates, SIGN_ASSET_CACHE_BUST } from './signAssets';
 
 export type SignId = string;
 
@@ -86,6 +86,7 @@ export function SignRenderer({ signId, size = SIZE }: { signId: SignId; size?: n
 
   const [candidateIndex, setCandidateIndex] = useState(0);
   const src = candidates[Math.min(candidateIndex, candidates.length - 1)];
+  const srcWithCacheBust = `${src}?v=${SIGN_ASSET_CACHE_BUST}`;
 
   if (candidateIndex >= candidates.length) {
     return (
@@ -101,8 +102,8 @@ export function SignRenderer({ signId, size = SIZE }: { signId: SignId; size?: n
 
   return (
     <img
-      key={src}
-      src={src}
+      key={srcWithCacheBust}
+      src={srcWithCacheBust}
       alt={entry?.name ?? signId}
       width={size}
       height={size}

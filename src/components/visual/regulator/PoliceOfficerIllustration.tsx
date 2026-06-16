@@ -252,6 +252,26 @@ function OfficerLegs({ facing, uid }: { facing: Facing; uid: string }) {
   );
 }
 
+function TacticalBelt({ centerX, y, width }: { centerX: number; y: number; width: number }) {
+  const x = centerX - width / 2;
+  return (
+    <g>
+      <rect x={x} y={y} width={width} height="11" rx="2" fill="#111827" stroke="#374151" strokeWidth="0.5" />
+      <rect x={x + 4} y={y + 2} width={width - 8} height="3" rx="1" fill="#4b5563" opacity="0.55" />
+      {/* Рація */}
+      <rect x={x + 10} y={y - 2} width="14" height="16" rx="2" fill="#1f2937" stroke="#64748b" strokeWidth="0.45" />
+      <rect x={x + 12} y={y + 1} width="10" height="6" rx="1" fill="#22c55e" opacity="0.75" />
+      <rect x={x + 14} y={y + 9} width="6" height="3" rx="0.8" fill="#475569" />
+      {/* Пряжка */}
+      <rect x={centerX - 8} y={y + 1.5} width="16" height="8" rx="1.5" fill="#6b7280" stroke="#111827" strokeWidth="0.4" />
+      {/* Кобура */}
+      <rect x={x + width - 30} y={y - 4} width="20" height="22" rx="3" fill="#1f2937" stroke={C.gold} strokeWidth="0.55" />
+      <ellipse cx={x + width - 20} cy={y + 8} rx="5.5" ry="6.5" fill="#0f172a" stroke="#94a3b8" strokeWidth="0.45" />
+      <rect x={x + width - 26} y={y + 14} width="12" height="4" rx="1" fill="#374151" />
+    </g>
+  );
+}
+
 function OfficerTorso({ facing, uid }: { facing: Facing; uid: string }) {
   const paths: Record<Facing, string> = {
     front: 'M62 118 Q120 106 178 118 L184 232 Q120 242 56 232 Z',
@@ -264,13 +284,7 @@ function OfficerTorso({ facing, uid }: { facing: Facing; uid: string }) {
     <g>
       <path d={paths[facing]} fill={`url(#uni-${uid})`} stroke={C.black} strokeWidth="1" />
       <ReflectiveVest facing={facing} uid={uid} />
-      {(facing === 'front' || facing === 'back') && (
-        <>
-          <rect x="74" y="218" width="92" height="12" rx="2" fill="#111827" stroke="#374151" strokeWidth="0.5" />
-          <rect x="118" y="214" width="16" height="18" rx="2" fill="#1f2937" stroke={C.gold} strokeWidth="0.5" />
-          <circle cx="126" cy="223" r="4" fill="#0f172a" stroke="#94a3b8" strokeWidth="0.4" />
-        </>
-      )}
+      {(facing === 'front' || facing === 'back') && <TacticalBelt centerX={120} y={218} width={92} />}
       {facing === 'front' && (
         <>
           <path d="M98 112 L120 128 L142 112" fill="white" stroke="#e2e8f0" strokeWidth="0.6" />
