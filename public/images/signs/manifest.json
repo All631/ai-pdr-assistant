@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-16T09:22:04.398Z",
+  "generatedAt": "2026-06-16T10:21:40.551Z",
   "source": "Wikimedia Commons (UA road signs, DSTU 4100)",
   "requestDelayMs": 2000,
   "patterns": [
@@ -87,9 +87,8 @@
       "category": "warning",
       "file": "1_34.svg",
       "assetId": "1_34",
-      "wikiName": "UA road sign 1.34.svg",
-      "source": "pattern",
-      "ok": true
+      "ok": true,
+      "cached": true
     },
     {
       "id": "slippery",
@@ -232,9 +231,8 @@
       "category": "prohibitory",
       "file": "3_29_50.svg",
       "assetId": "3_29_50",
-      "wikiName": "UA road sign 3.29-050.svg",
-      "source": "pattern",
-      "ok": true
+      "ok": true,
+      "cached": true
     },
     {
       "id": "speed-70",
@@ -242,9 +240,8 @@
       "category": "prohibitory",
       "file": "3_29_70.svg",
       "assetId": "3_29_70",
-      "wikiName": "UA road sign 3.29-70.svg",
-      "source": "pattern",
-      "ok": true
+      "ok": true,
+      "cached": true
     },
     {
       "id": "speed-90",
@@ -269,9 +266,8 @@
       "category": "prohibitory",
       "file": "3_33.svg",
       "assetId": "3_33",
-      "wikiName": "UA road sign 3.33.svg",
-      "source": "pattern",
-      "ok": true
+      "ok": true,
+      "cached": true
     },
     {
       "id": "no-horns",
@@ -279,9 +275,8 @@
       "category": "prohibitory",
       "file": "3_32.svg",
       "assetId": "3_32",
-      "wikiName": "UA road sign 3.32.svg",
-      "source": "pattern",
-      "ok": true
+      "ok": true,
+      "cached": true
     },
     {
       "id": "straight",
@@ -313,9 +308,8 @@
       "category": "mandatory",
       "file": "4_3.svg",
       "assetId": "4_3",
-      "wikiName": "UA road sign 4.3.svg",
-      "source": "pattern",
-      "ok": true
+      "ok": true,
+      "cached": true
     },
     {
       "id": "bicycle-lane",
@@ -331,9 +325,8 @@
       "category": "mandatory",
       "file": "5_14.svg",
       "assetId": "5_14",
-      "wikiName": "UA road sign 5.14.svg",
-      "source": "pattern",
-      "ok": true
+      "ok": true,
+      "cached": true
     },
     {
       "id": "min-speed-40",
@@ -341,9 +334,8 @@
       "category": "mandatory",
       "file": "3_27_40.svg",
       "assetId": "3_27_40",
-      "wikiName": "UA road sign 3.27.svg",
-      "source": "pattern",
-      "ok": true
+      "ok": true,
+      "cached": true
     },
     {
       "id": "parking",
@@ -351,7 +343,9 @@
       "category": "info",
       "file": "6_4.svg",
       "assetId": "6_4",
-      "ok": false
+      "wikiName": "UA road sign 6.4.svg",
+      "source": "pattern",
+      "ok": true
     },
     {
       "id": "direction",
@@ -359,7 +353,9 @@
       "category": "info",
       "file": "5_7.svg",
       "assetId": "5_7",
-      "ok": false
+      "wikiName": "UA road sign 5.7.1.svg",
+      "source": "pattern",
+      "ok": true
     },
     {
       "id": "one-way",
@@ -385,7 +381,9 @@
       "category": "info",
       "file": "5_38.svg",
       "assetId": "5_38",
-      "ok": false
+      "wikiName": "UA road sign 5.38.2.svg",
+      "source": "pattern",
+      "ok": true
     },
     {
       "id": "living-zone",
@@ -393,7 +391,9 @@
       "category": "info",
       "file": "5_38_1.svg",
       "assetId": "5_38_1",
-      "ok": false
+      "wikiName": "UA road sign 5.38.1.svg",
+      "source": "pattern",
+      "ok": true
     },
     {
       "id": "motorway",
@@ -427,7 +427,9 @@
       "category": "service",
       "file": "5_26.svg",
       "assetId": "5_26",
-      "ok": false
+      "wikiName": "UA road sign 5.26.svg",
+      "source": "pattern",
+      "ok": true
     },
     {
       "id": "hotel",
@@ -443,7 +445,9 @@
       "category": "service",
       "file": "6_4_1.svg",
       "assetId": "6_4_1",
-      "ok": false
+      "wikiName": "UA road sign 6.4.svg",
+      "source": "pattern",
+      "ok": true
     },
     {
       "id": "telephone",
@@ -451,7 +455,9 @@
       "category": "service",
       "file": "6_6.svg",
       "assetId": "6_6",
-      "ok": false
+      "wikiName": "UA road sign 6.6.svg",
+      "source": "pattern",
+      "ok": true
     },
     {
       "id": "first-aid",
@@ -459,7 +465,9 @@
       "category": "service",
       "file": "6_1.svg",
       "assetId": "6_1",
-      "ok": false
+      "wikiName": "UA road sign 6.1 (2021).svg",
+      "source": "pattern",
+      "ok": true
     },
     {
       "id": "car-service",
