@@ -81,6 +81,17 @@ function titleMatchesEntry(title, entry) {
     return base === `3.27-${pad3}` || base === '3.27';
   }
 
+  if (entry.code.startsWith('4.1') || entry.code.startsWith('8.1')) {
+    return (
+      base === entry.code ||
+      base.startsWith(`${entry.code}-`) ||
+      base.startsWith(`${entry.code}.`)
+    );
+  }
+
+  if (entry.id === 'turn-left' && (base === '4.1.2-1' || base === '4.1.2.1')) return true;
+  if (entry.id === 'turn-right' && base === '4.1.2') return true;
+
   return base === entry.code || base.startsWith(`${entry.code}-`) || base.startsWith(`${entry.code}.`);
 }
 

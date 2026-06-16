@@ -11,12 +11,18 @@ const ASSET_OVERRIDES: Record<string, string> = {
   'speed-90': '3_29_90',
   stop: '2_2',
   'end-main-road': '2_24',
+  straight: '4_1_1',
   'turn-right': '4_1_2',
   'turn-left': '4_1_2_1',
+  'bicycle-lane': '4_4_1',
   'living-zone': '5_38_1',
+  'gas-station': '5_15',
   food: '6_4_1',
   parking: '6_4',
   'pedestrian-zone': '5_38',
+  hotel: '6_2',
+  'car-service': '6_8',
+  'sign-plate': '8_1_1',
   'min-speed-40': '3_27_40',
 };
 
@@ -34,4 +40,20 @@ export function getSignImageSrc(signId: string, code?: string): string {
 /** Legacy alias lookup by code alone (unique codes only). */
 export function getSignImageSrcByCode(code: string): string {
   return `/images/signs/${codeToAssetId(code)}.svg`;
+}
+
+/** Ordered fallback paths when primary asset is missing on disk/CDN. */
+export function getSignImageCandidates(signId: string, code?: string): string[] {
+  const primary = getSignAssetId(signId, code);
+  const paths: string[] = [`/images/signs/${primary}.svg`];
+
+  if (code) {
+    const codePath = `/images/signs/${codeToAssetId(code)}.svg`;
+    if (!paths.includes(codePath)) paths.push(codePath);
+  }
+
+  const legacyId = `/images/signs/${signId}.svg`;
+  if (!paths.includes(legacyId)) paths.push(legacyId);
+
+  return paths;
 }

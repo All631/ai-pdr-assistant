@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { TRAFFIC_SIGN_CATALOG, type SignCategoryId } from '../../data/trafficSignsCatalog';
-import { getSignImageSrc, getSignImageSrcByCode } from './signAssets';
+import { getSignImageCandidates } from './signAssets';
 
 export type SignId = string;
 
@@ -79,15 +79,15 @@ export function SignRenderer({ signId, size = SIZE }: { signId: SignId; size?: n
     [signId]
   );
 
-  const [imageError, setImageError] = useState(false);
-  const [useCodeAlias, setUseCodeAlias] = useState(false);
+  const candidates = useMemo(
+    () => getSignImageCandidates(signId, entry?.code),
+    [signId, entry?.code]
+  );
 
-  const primarySrc = getSignImageSrc(signId, entry?.code);
-  const codeSrc = entry ? getSignImageSrcByCode(entry.code) : null;
-  const hasAlias = Boolean(codeSrc && codeSrc !== primarySrc);
-  const src = useCodeAlias && hasAlias ? codeSrc! : primarySrc;
+  const [candidateIndex, setCandidateIndex] = useState(0);
+  const src = candidates[Math.min(candidateIndex, candidates.length - 1)];
 
-  if (imageError) {
+  if (candidateIndex >= candidates.length) {
     return (
       <SignFallback
         signId={signId}
@@ -110,11 +110,7 @@ export function SignRenderer({ signId, size = SIZE }: { signId: SignId; size?: n
       loading="lazy"
       decoding="async"
       onError={() => {
-        if (!useCodeAlias && hasAlias) {
-          setUseCodeAlias(true);
-          return;
-        }
-        setImageError(true);
+        setCandidateIndex((i) => i + 1);
       }}
     />
   );

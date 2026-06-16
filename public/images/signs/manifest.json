@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-16T10:21:40.551Z",
+  "generatedAt": "2026-06-16T10:38:35.055Z",
   "source": "Wikimedia Commons (UA road signs, DSTU 4100)",
   "requestDelayMs": 2000,
   "patterns": [
@@ -317,7 +317,9 @@
       "category": "mandatory",
       "file": "4_4_1.svg",
       "assetId": "4_4_1",
-      "ok": false
+      "wikiName": "UA road sign 4.4.svg",
+      "source": "pattern",
+      "ok": true
     },
     {
       "id": "bus-lane",
@@ -343,9 +345,8 @@
       "category": "info",
       "file": "6_4.svg",
       "assetId": "6_4",
-      "wikiName": "UA road sign 6.4.svg",
-      "source": "pattern",
-      "ok": true
+      "ok": true,
+      "cached": true
     },
     {
       "id": "direction",
@@ -353,9 +354,8 @@
       "category": "info",
       "file": "5_7.svg",
       "assetId": "5_7",
-      "wikiName": "UA road sign 5.7.1.svg",
-      "source": "pattern",
-      "ok": true
+      "ok": true,
+      "cached": true
     },
     {
       "id": "one-way",
@@ -381,9 +381,8 @@
       "category": "info",
       "file": "5_38.svg",
       "assetId": "5_38",
-      "wikiName": "UA road sign 5.38.2.svg",
-      "source": "pattern",
-      "ok": true
+      "ok": true,
+      "cached": true
     },
     {
       "id": "living-zone",
@@ -391,9 +390,8 @@
       "category": "info",
       "file": "5_38_1.svg",
       "assetId": "5_38_1",
-      "wikiName": "UA road sign 5.38.1.svg",
-      "source": "pattern",
-      "ok": true
+      "ok": true,
+      "cached": true
     },
     {
       "id": "motorway",
@@ -419,7 +417,9 @@
       "category": "service",
       "file": "5_15.svg",
       "assetId": "5_15",
-      "ok": false
+      "wikiName": "UA road sign 5.15.svg",
+      "source": "pattern",
+      "ok": true
     },
     {
       "id": "rest-area",
@@ -427,9 +427,8 @@
       "category": "service",
       "file": "5_26.svg",
       "assetId": "5_26",
-      "wikiName": "UA road sign 5.26.svg",
-      "source": "pattern",
-      "ok": true
+      "ok": true,
+      "cached": true
     },
     {
       "id": "hotel",
@@ -445,9 +444,8 @@
       "category": "service",
       "file": "6_4_1.svg",
       "assetId": "6_4_1",
-      "wikiName": "UA road sign 6.4.svg",
-      "source": "pattern",
-      "ok": true
+      "ok": true,
+      "cached": true
     },
     {
       "id": "telephone",
@@ -455,9 +453,8 @@
       "category": "service",
       "file": "6_6.svg",
       "assetId": "6_6",
-      "wikiName": "UA road sign 6.6.svg",
-      "source": "pattern",
-      "ok": true
+      "ok": true,
+      "cached": true
     },
     {
       "id": "first-aid",
@@ -465,9 +462,8 @@
       "category": "service",
       "file": "6_1.svg",
       "assetId": "6_1",
-      "wikiName": "UA road sign 6.1 (2021).svg",
-      "source": "pattern",
-      "ok": true
+      "ok": true,
+      "cached": true
     },
     {
       "id": "car-service",
@@ -475,7 +471,9 @@
       "category": "service",
       "file": "6_8.svg",
       "assetId": "6_8",
-      "ok": false
+      "wikiName": "UA road sign 6.8.svg",
+      "source": "pattern",
+      "ok": true
     },
     {
       "id": "sign-plate",
