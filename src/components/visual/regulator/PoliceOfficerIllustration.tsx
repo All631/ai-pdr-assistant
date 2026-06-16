@@ -6,21 +6,26 @@ import type {
   VehicleMove,
 } from '../../../data/regulatorGesturesData';
 
-const NPU = {
-  navy: '#0a1628',
-  navyMid: '#152a47',
-  navyLight: '#1e3d66',
-  vest: '#ea580c',
-  vestDark: '#c2410c',
-  stripe: '#fef08a',
-  skin: '#f5c9a0',
-  skinShadow: '#d4956a',
+/** Палітра навчального плаката автошколи (NPU) */
+const C = {
+  navy: '#0c1a2e',
+  navyMid: '#1a3354',
+  navyLight: '#264a73',
+  vest: '#e85d04',
+  vestDark: '#b45309',
+  stripe: '#fef9c3',
+  skin: '#e8b48a',
+  skinShadow: '#c48660',
+  glove: '#f8fafc',
   gold: '#fbbf24',
-  silver: '#cbd5e1',
   black: '#0f172a',
+  boot: '#111827',
+  bootSole: '#374151',
 };
 
-const VEST_ORANGE = NPU.vest;
+const VEST_ORANGE = C.vest;
+
+type Facing = 'front' | 'back' | 'left' | 'right';
 
 interface PoliceOfficerSvgProps {
   gesture: RegulatorGestureId;
@@ -28,47 +33,36 @@ interface PoliceOfficerSvgProps {
   className?: string;
 }
 
+interface Point {
+  x: number;
+  y: number;
+}
+
 function OfficerDefs({ uid }: { uid: string }) {
   return (
     <defs>
       <linearGradient id={`uni-${uid}`} x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stopColor={NPU.navyLight} />
-        <stop offset="45%" stopColor={NPU.navyMid} />
-        <stop offset="100%" stopColor={NPU.navy} />
-      </linearGradient>
-      <linearGradient id={`uni-sh-${uid}`} x1="0%" y1="0%" x2="0%" y2="100%">
-        <stop offset="0%" stopColor={NPU.navyMid} />
-        <stop offset="100%" stopColor={NPU.navy} />
+        <stop offset="0%" stopColor={C.navyLight} />
+        <stop offset="100%" stopColor={C.navy} />
       </linearGradient>
       <linearGradient id={`vest-${uid}`} x1="0%" y1="0%" x2="0%" y2="100%">
         <stop offset="0%" stopColor="#fb923c" />
-        <stop offset="100%" stopColor={NPU.vest} />
+        <stop offset="100%" stopColor={C.vest} />
       </linearGradient>
       <linearGradient id={`cap-${uid}`} x1="0%" y1="0%" x2="0%" y2="100%">
-        <stop offset="0%" stopColor={NPU.navyLight} />
-        <stop offset="60%" stopColor={NPU.navyMid} />
-        <stop offset="100%" stopColor={NPU.navy} />
+        <stop offset="0%" stopColor={C.navyLight} />
+        <stop offset="100%" stopColor={C.navyMid} />
       </linearGradient>
-      <linearGradient id={`skin-${uid}`} x1="30%" y1="0%" x2="70%" y2="100%">
-        <stop offset="0%" stopColor="#fde4c8" />
-        <stop offset="100%" stopColor={NPU.skin} />
+      <linearGradient id={`skin-${uid}`} x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stopColor="#fde8d4" />
+        <stop offset="100%" stopColor={C.skin} />
       </linearGradient>
-      <linearGradient id={`badge-${uid}`} x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stopColor="#f8fafc" />
-        <stop offset="40%" stopColor={NPU.silver} />
-        <stop offset="100%" stopColor="#64748b" />
-      </linearGradient>
-      <radialGradient id={`badge-glow-${uid}`} cx="35%" cy="30%" r="70%">
-        <stop offset="0%" stopColor="#ffffff" stopOpacity="0.9" />
-        <stop offset="100%" stopColor="#94a3b8" stopOpacity="0.2" />
-      </radialGradient>
-      <filter id={`soft-${uid}`} x="-20%" y="-20%" width="140%" height="140%">
-        <feDropShadow dx="0" dy="2" stdDeviation="2.5" floodColor="#000" floodOpacity="0.2" />
+      <filter id={`shadow-${uid}`} x="-15%" y="-15%" width="130%" height="130%">
+        <feDropShadow dx="0" dy="3" stdDeviation="3" floodColor="#000" floodOpacity="0.22" />
       </filter>
-      <filter id={`neon-${uid}`} x="-80%" y="-80%" width="260%" height="260%">
-        <feGaussianBlur in="SourceGraphic" stdDeviation="4" result="blur" />
+      <filter id={`baton-glow-${uid}`} x="-60%" y="-60%" width="220%" height="220%">
+        <feGaussianBlur in="SourceGraphic" stdDeviation="3.5" result="blur" />
         <feMerge>
-          <feMergeNode in="blur" />
           <feMergeNode in="blur" />
           <feMergeNode in="SourceGraphic" />
         </feMerge>
@@ -77,11 +71,11 @@ function OfficerDefs({ uid }: { uid: string }) {
   );
 }
 
-function Trident({ cx, cy }: { cx: number; cy: number }) {
+function Trident({ cx, cy, scale = 1 }: { cx: number; cy: number; scale?: number }) {
   return (
-    <g transform={`translate(${cx} ${cy}) scale(0.85)`}>
-      <path d="M0 -5 L0 4 M-3.5 -2 L3.5 -2 M-2.5 0 L2.5 0" stroke={NPU.gold} strokeWidth="1.2" strokeLinecap="round" fill="none" />
-      <path d="M-3.5 -2 L-4.5 -4 M3.5 -2 L4.5 -4 M-2.5 0 L-3.5 1.5 M2.5 0 L3.5 1.5" stroke={NPU.gold} strokeWidth="0.9" strokeLinecap="round" />
+    <g transform={`translate(${cx} ${cy}) scale(${scale})`}>
+      <path d="M0 -6 L0 5 M-4.5 -2.5 L4.5 -2.5 M-3 1 L3 1" stroke={C.gold} strokeWidth="1.3" strokeLinecap="round" fill="none" />
+      <path d="M-4.5 -2.5 L-5.5 -4.5 M4.5 -2.5 L5.5 -4.5" stroke={C.gold} strokeWidth="1" strokeLinecap="round" />
     </g>
   );
 }
@@ -89,78 +83,116 @@ function Trident({ cx, cy }: { cx: number; cy: number }) {
 function NpuCockade({ cx, cy, uid }: { cx: number; cy: number; uid: string }) {
   return (
     <g>
-      <circle cx={cx} cy={cy} r="9" fill={`url(#uni-${uid})`} stroke={NPU.gold} strokeWidth="2" />
-      <circle cx={cx} cy={cy} r="6" fill="#1e40af" stroke={NPU.gold} strokeWidth="0.8" />
-      <circle cx={cx} cy={cy} r="3.5" fill={NPU.gold} opacity="0.85" />
-      <Trident cx={cx} cy={cy - 0.5} />
+      <circle cx={cx} cy={cy} r="10" fill={`url(#uni-${uid})`} stroke={C.gold} strokeWidth="2.2" />
+      <circle cx={cx} cy={cy} r="6.5" fill="#1d4ed8" stroke={C.gold} strokeWidth="0.9" />
+      <circle cx={cx} cy={cy} r="3.8" fill={C.gold} />
+      <Trident cx={cx} cy={cy - 0.5} scale={0.9} />
     </g>
   );
 }
 
-function PoliceBadge({ x, y, uid }: { x: number; y: number; uid: string }) {
+/** Сегмент кінцівки: плече/стегно → лікоть/коліно → зап'ястя/щиколотка */
+function LimbSegment({
+  from,
+  mid,
+  to,
+  widthUpper,
+  widthLower,
+  fill,
+  jointFill = C.navyMid,
+}: {
+  from: Point;
+  mid: Point;
+  to: Point;
+  widthUpper: number;
+  widthLower: number;
+  fill: string;
+  jointFill?: string;
+}) {
   return (
-    <g transform={`translate(${x} ${y})`}>
-      <ellipse cx="0" cy="0" rx="11" ry="13" fill={`url(#badge-${uid})`} stroke="#475569" strokeWidth="0.6" />
-      <ellipse cx="0" cy="0" rx="11" ry="13" fill={`url(#badge-glow-${uid})`} />
-      <circle cx="0" cy="-2" r="4" fill={NPU.navyMid} stroke={NPU.gold} strokeWidth="0.5" />
-      <text x="0" y="5" fontSize="4.5" textAnchor="middle" fill={NPU.navy} fontWeight="bold" fontFamily="Arial,sans-serif">
-        НПУ
-      </text>
+    <g stroke={C.black} strokeWidth="0.9" strokeLinejoin="round">
+      <line x1={from.x} y1={from.y} x2={mid.x} y2={mid.y} stroke={fill} strokeWidth={widthUpper} strokeLinecap="round" />
+      <line x1={mid.x} y1={mid.y} x2={to.x} y2={to.y} stroke={fill} strokeWidth={widthLower} strokeLinecap="round" />
+      <circle cx={mid.x} cy={mid.y} r={widthLower * 0.38} fill={jointFill} stroke={C.black} strokeWidth="0.6" />
     </g>
   );
 }
 
-function TacticalBelt({ y, width }: { y: number; width: number }) {
-  const x = 90 - width / 2;
+function WhiteGlove({ cx, cy, angle = 0, size = 10 }: { cx: number; cy: number; angle?: number; size?: number }) {
   return (
-    <g>
-      <rect x={x} y={y} width={width} height="10" rx="2" fill="#111827" stroke="#374151" strokeWidth="0.5" />
-      <rect x={x + 4} y={y + 1.5} width={width - 8} height="3" rx="1" fill="#4b5563" opacity="0.6" />
-      <rect x={x + width * 0.62} y={y - 2} width="14" height="16" rx="2" fill="#1f2937" stroke="#111" strokeWidth="0.5" />
-      <ellipse cx={x + width * 0.69} cy={y + 6} rx="4" ry="5" fill="#0f172a" stroke={NPU.silver} strokeWidth="0.4" />
-      <rect x={x + width * 0.38} y={y + 1} width="8" height="8" rx="1.5" fill="#374151" stroke="#111" strokeWidth="0.4" />
-      <rect x={x + width * 0.48} y={y + 1} width="7" height="8" rx="1.5" fill="#374151" stroke="#111" strokeWidth="0.4" />
-      <rect x={x + width * 0.22} y={y + 2} width="10" height="6" rx="1" fill="#1e293b" stroke={NPU.silver} strokeWidth="0.3" />
-      <circle cx={x + width * 0.27} cy={y + 5} r="1.2" fill="#22c55e" opacity="0.8" />
+    <g transform={`translate(${cx} ${cy}) rotate(${angle})`}>
+      <ellipse cx="0" cy="0" rx={size * 0.85} ry={size} fill={C.glove} stroke="#cbd5e1" strokeWidth="0.7" />
+      <path d={`M${-size * 0.5} ${-size * 0.3} L${-size * 0.5} ${-size * 1.1} M0 ${-size * 0.4} L0 ${-size * 1.2} M${size * 0.5} ${-size * 0.3} L${size * 0.5} ${-size * 1.05}`} stroke={C.glove} strokeWidth="2.2" strokeLinecap="round" />
     </g>
   );
 }
 
-function NeonBaton({ x, y, angle, uid }: { x: number; y: number; angle: number; uid: string }) {
+function ReflectiveBaton({ x, y, angle, uid }: { x: number; y: number; angle: number; uid: string }) {
   return (
-    <g transform={`translate(${x} ${y}) rotate(${angle})`} filter={`url(#neon-${uid})`}>
-      <rect x="-4" y="2" width="8" height="46" rx="2.5" fill="#fef08a" opacity="0.45" />
-      <rect x="-3.5" y="0" width="7" height="44" rx="2" fill="#fef08a" stroke="#ca8a04" strokeWidth="0.5" />
-      {[0, 11, 22, 33].map((off, i) => (
-        <rect key={i} x="-3.5" y={off} width="7" height="11" rx="1" fill={i % 2 === 0 ? '#dc2626' : '#fef08a'} />
+    <g transform={`translate(${x} ${y}) rotate(${angle})`} filter={`url(#baton-glow-${uid})`}>
+      <rect x="-4" y="-2" width="8" height="52" rx="2.5" fill="#fef08a" opacity="0.35" />
+      <rect x="-3.5" y="0" width="7" height="50" rx="2" fill="#fef08a" stroke="#a16207" strokeWidth="0.6" />
+      {[0, 12, 24, 36].map((off, i) => (
+        <rect key={off} x="-3.5" y={off} width="7" height="12" rx="1" fill={i % 2 === 0 ? '#dc2626' : '#fef08a'} />
       ))}
     </g>
   );
 }
 
-function ReflectiveVest({
-  facing,
-  uid,
-}: {
-  facing: 'front' | 'back' | 'left' | 'right';
-  uid: string;
-}) {
-  const config: Record<string, { d: string; sx: number; sw: number; ys: number[] }> = {
-    front: { d: 'M50 118 Q90 112 130 118 L124 168 Q90 174 56 168 Z', sx: 56, sw: 68, ys: [128, 138, 148, 158] },
-    back: { d: 'M50 118 Q90 112 130 118 L124 168 Q90 174 56 168 Z', sx: 56, sw: 68, ys: [128, 138, 148, 158] },
-    left: { d: 'M78 118 Q98 114 122 118 L118 168 Q98 172 74 168 Z', sx: 78, sw: 38, ys: [130, 142, 154] },
-    right: { d: 'M58 118 Q82 114 102 118 L106 168 Q82 172 62 168 Z', sx: 64, sw: 38, ys: [130, 142, 154] },
+function ReflectiveVest({ facing, uid }: { facing: Facing; uid: string }) {
+  const shapes: Record<Facing, { body: string; stripes: { x: number; y: number; w: number }[]; labelX: number; labelY: number }> = {
+    front: {
+      body: 'M58 138 Q120 128 182 138 L176 218 Q120 228 64 218 Z',
+      stripes: [
+        { x: 68, y: 152, w: 104 },
+        { x: 68, y: 168, w: 104 },
+        { x: 68, y: 184, w: 104 },
+        { x: 68, y: 200, w: 104 },
+      ],
+      labelX: 120,
+      labelY: 178,
+    },
+    back: {
+      body: 'M58 138 Q120 128 182 138 L176 218 Q120 228 64 218 Z',
+      stripes: [
+        { x: 68, y: 152, w: 104 },
+        { x: 68, y: 168, w: 104 },
+        { x: 68, y: 184, w: 104 },
+      ],
+      labelX: 120,
+      labelY: 182,
+    },
+    left: {
+      body: 'M92 138 Q118 132 148 138 L144 218 Q118 224 88 216 Z',
+      stripes: [
+        { x: 96, y: 156, w: 44 },
+        { x: 96, y: 174, w: 44 },
+        { x: 96, y: 192, w: 44 },
+      ],
+      labelX: 118,
+      labelY: 178,
+    },
+    right: {
+      body: 'M92 138 Q118 132 148 138 L144 218 Q118 224 88 216 Z',
+      stripes: [
+        { x: 96, y: 156, w: 44 },
+        { x: 96, y: 174, w: 44 },
+        { x: 96, y: 192, w: 44 },
+      ],
+      labelX: 118,
+      labelY: 178,
+    },
   };
-  const { d, sx, sw, ys } = config[facing];
+  const { body, stripes, labelX, labelY } = shapes[facing];
 
   return (
     <g>
-      <path d={d} fill={`url(#vest-${uid})`} stroke={NPU.vestDark} strokeWidth="0.8" />
-      {ys.map((y) => (
-        <rect key={y} x={sx} y={y} width={sw} height="5" rx="1.5" fill={NPU.stripe} opacity="0.95" />
+      <path d={body} fill={`url(#vest-${uid})`} stroke={C.vestDark} strokeWidth="1" />
+      {stripes.map((s, i) => (
+        <rect key={i} x={s.x} y={s.y} width={s.w} height="7" rx="2" fill={C.stripe} opacity="0.95" />
       ))}
       {(facing === 'front' || facing === 'back') && (
-        <text x="90" y="145" fontSize="11" textAnchor="middle" fill="white" fontWeight="bold" fontFamily="Arial,sans-serif" letterSpacing="1">
+        <text x={labelX} y={labelY} fontSize="13" textAnchor="middle" fill="white" fontWeight="bold" fontFamily="Arial,sans-serif" letterSpacing="1.2">
           ПОЛІЦІЯ
         </text>
       )}
@@ -168,186 +200,301 @@ function ReflectiveVest({
   );
 }
 
-function SleevePatch({ x, y, flip }: { x: number; y: number; flip?: boolean }) {
-  return (
-    <g transform={`translate(${x} ${y})${flip ? ' scale(-1,1)' : ''}`}>
-      <rect x="-8" y="0" width="16" height="10" rx="2" fill={NPU.navyLight} stroke={NPU.gold} strokeWidth="0.5" />
-      <rect x="-6" y="2" width="12" height="2" fill={NPU.gold} opacity="0.7" />
-      <rect x="-4" y="5" width="8" height="3" rx="0.5" fill="#1e40af" />
-    </g>
-  );
-}
+function Boot({ heel, toe, facing }: { heel: Point; toe: Point; facing: Facing }) {
+  const midX = (heel.x + toe.x) / 2;
+  const midY = (heel.y + toe.y) / 2;
+  const dx = toe.x - heel.x;
+  const dy = toe.y - heel.y;
+  const len = Math.hypot(dx, dy) || 1;
+  const nx = (-dy / len) * 8;
+  const ny = (dx / len) * 8;
 
-function CollarAndTie() {
   return (
     <g>
-      <path d="M78 108 L90 118 L102 108" fill="white" stroke="#e2e8f0" strokeWidth="0.5" />
-      <path d="M86 118 L90 148 L94 118 Z" fill="#111827" />
-      <path d="M88 118 L90 142 L92 118" fill="#374151" opacity="0.5" />
+      <path
+        d={`M${heel.x + nx} ${heel.y + ny} L${toe.x + nx} ${toe.y + ny} L${toe.x - nx * 0.4} ${toe.y - ny * 0.4} L${heel.x - nx * 0.4} ${heel.y - ny * 0.4} Z`}
+        fill={C.boot}
+        stroke={C.black}
+        strokeWidth="0.8"
+      />
+      <ellipse cx={toe.x} cy={toe.y} rx="9" ry="6" fill={C.boot} stroke={C.black} strokeWidth="0.6" />
+      <rect
+        x={midX - 10}
+        y={midY + (facing === 'front' || facing === 'back' ? 4 : 2)}
+        width="20"
+        height="4"
+        rx="1"
+        fill={C.bootSole}
+        transform={`rotate(${Math.atan2(dy, dx) * (180 / Math.PI)} ${midX} ${midY})`}
+      />
     </g>
   );
 }
 
-function Legs({ uid }: { uid: string }) {
+function OfficerLegs({ facing, uid }: { facing: Facing; uid: string }) {
+  const fill = `url(#uni-${uid})`;
+  const hipL: Point = facing === 'left' ? { x: 108, y: 228 } : facing === 'right' ? { x: 132, y: 228 } : { x: 98, y: 228 };
+  const hipR: Point = facing === 'left' ? { x: 128, y: 228 } : facing === 'right' ? { x: 152, y: 228 } : { x: 142, y: 228 };
+  const kneeL: Point = facing === 'left' ? { x: 104, y: 278 } : facing === 'right' ? { x: 136, y: 278 } : { x: 94, y: 278 };
+  const kneeR: Point = facing === 'left' ? { x: 132, y: 278 } : facing === 'right' ? { x: 164, y: 278 } : { x: 146, y: 278 };
+  const ankleL: Point = facing === 'left' ? { x: 100, y: 322 } : facing === 'right' ? { x: 132, y: 322 } : { x: 88, y: 322 };
+  const ankleR: Point = facing === 'left' ? { x: 136, y: 322 } : facing === 'right' ? { x: 168, y: 322 } : { x: 152, y: 322 };
+  const toeL: Point = { x: ankleL.x + (facing === 'left' ? -6 : facing === 'right' ? 6 : -4), y: ankleL.y + 8 };
+  const toeR: Point = { x: ankleR.x + (facing === 'left' ? -6 : facing === 'right' ? 6 : 4), y: ankleR.y + 8 };
+
   return (
     <g>
-      <path d="M68 178 Q74 178 76 230 L60 230 Q58 178 64 178 Z" fill={`url(#uni-sh-${uid})`} stroke={NPU.black} strokeWidth="0.6" />
-      <path d="M104 178 Q98 178 96 230 L112 230 Q114 178 108 178 Z" fill={`url(#uni-sh-${uid})`} stroke={NPU.black} strokeWidth="0.6" />
-      <ellipse cx="68" cy="178" rx="10" ry="5" fill={NPU.navyMid} />
-      <ellipse cx="112" cy="178" rx="10" ry="5" fill={NPU.navyMid} />
-      <path d="M58 228 Q68 234 78 228 L78 236 Q68 240 58 236 Z" fill={NPU.black} />
-      <path d="M102 228 Q112 234 122 228 L122 236 Q112 240 102 236 Z" fill={NPU.black} />
-      <rect x="60" y="232" width="18" height="4" rx="1" fill="#475569" />
-      <rect x="102" y="232" width="18" height="4" rx="1" fill="#475569" />
+      <LimbSegment from={hipL} mid={kneeL} to={ankleL} widthUpper={16} widthLower={14} fill={fill} />
+      <LimbSegment from={hipR} mid={kneeR} to={ankleR} widthUpper={16} widthLower={14} fill={fill} />
+      <Boot heel={ankleL} toe={toeL} facing={facing} />
+      <Boot heel={ankleR} toe={toeR} facing={facing} />
     </g>
   );
 }
 
-function Torso({ facing, uid }: { facing: 'front' | 'back' | 'left' | 'right'; uid: string }) {
-  const torsoPaths: Record<string, string> = {
-    front: 'M52 104 Q90 98 128 104 L132 178 Q90 184 48 178 Z',
-    back: 'M52 104 Q90 98 128 104 L132 178 Q90 184 48 178 Z',
-    left: 'M76 104 Q98 100 118 106 L122 178 Q98 182 72 176 Z',
-    right: 'M62 104 Q82 100 104 106 L108 178 Q82 182 58 176 Z',
+function OfficerTorso({ facing, uid }: { facing: Facing; uid: string }) {
+  const paths: Record<Facing, string> = {
+    front: 'M62 118 Q120 106 178 118 L184 232 Q120 242 56 232 Z',
+    back: 'M62 118 Q120 106 178 118 L184 232 Q120 242 56 232 Z',
+    left: 'M88 118 Q118 110 152 118 L158 232 Q118 240 82 228 Z',
+    right: 'M88 118 Q118 110 152 118 L158 232 Q118 240 82 228 Z',
   };
 
   return (
     <g>
-      <path d={torsoPaths[facing]} fill={`url(#uni-${uid})`} stroke={NPU.black} strokeWidth="0.8" />
+      <path d={paths[facing]} fill={`url(#uni-${uid})`} stroke={C.black} strokeWidth="1" />
       <ReflectiveVest facing={facing} uid={uid} />
+      {(facing === 'front' || facing === 'back') && (
+        <>
+          <rect x="74" y="218" width="92" height="12" rx="2" fill="#111827" stroke="#374151" strokeWidth="0.5" />
+          <rect x="118" y="214" width="16" height="18" rx="2" fill="#1f2937" stroke={C.gold} strokeWidth="0.5" />
+          <circle cx="126" cy="223" r="4" fill="#0f172a" stroke="#94a3b8" strokeWidth="0.4" />
+        </>
+      )}
       {facing === 'front' && (
         <>
-          <PoliceBadge x={90} y={132} uid={uid} />
-          <CollarAndTie />
-          <SleevePatch x={48} y={118} />
-          <SleevePatch x={132} y={118} flip />
+          <path d="M98 112 L120 128 L142 112" fill="white" stroke="#e2e8f0" strokeWidth="0.6" />
+          <path d="M114 128 L120 168 L126 128 Z" fill="#111827" />
+          <ellipse cx="120" cy="148" rx="14" ry="16" fill="#cbd5e1" stroke="#64748b" strokeWidth="0.5" />
+          <text x="120" y="153" fontSize="7" textAnchor="middle" fill={C.navy} fontWeight="bold" fontFamily="Arial,sans-serif">
+            НПУ
+          </text>
         </>
       )}
-      {facing === 'back' && <SleevePatch x={48} y={118} />}
-      {(facing === 'front' || facing === 'back') && <TacticalBelt y={168} width={72} />}
     </g>
   );
 }
 
-function Head({ facing, uid }: { facing: 'front' | 'back' | 'left' | 'right'; uid: string }) {
+function OfficerHead({ facing, uid }: { facing: Facing; uid: string }) {
+  const cx = facing === 'left' ? 128 : facing === 'right' ? 112 : 120;
+  const profileNose =
+    facing === 'left'
+      ? 'M108 98 L96 102 L108 106'
+      : facing === 'right'
+        ? 'M132 98 L144 102 L132 106'
+        : '';
+
   return (
     <g>
-      <ellipse cx="90" cy="88" rx="22" ry="24" fill={`url(#skin-${uid})`} stroke={NPU.skinShadow} strokeWidth="0.6" />
+      {facing === 'front' && (
+        <ellipse cx={cx} cy={88} rx="26" ry="28" fill={`url(#skin-${uid})`} stroke={C.skinShadow} strokeWidth="0.8" />
+      )}
+      {(facing === 'left' || facing === 'right') && (
+        <ellipse cx={cx} cy={90} rx="22" ry="26" fill={`url(#skin-${uid})`} stroke={C.skinShadow} strokeWidth="0.8" />
+      )}
+      {facing === 'back' && (
+        <ellipse cx={cx} cy={88} rx="26" ry="28" fill={`url(#skin-${uid})`} stroke={C.skinShadow} strokeWidth="0.8" />
+      )}
+
       {facing !== 'back' && (
         <>
-          <ellipse cx="82" cy="86" rx="3" ry="3.5" fill={NPU.black} />
-          <ellipse cx="98" cy="86" rx="3" ry="3.5" fill={NPU.black} />
-          <circle cx="83" cy="85" r="1" fill="white" opacity="0.7" />
-          <circle cx="99" cy="85" r="1" fill="white" opacity="0.7" />
-          <path d="M84 96 Q90 99 96 96" stroke={NPU.skinShadow} strokeWidth="1" fill="none" strokeLinecap="round" />
+          {facing === 'front' && (
+            <>
+              <ellipse cx={108} cy={86} rx="3.5" ry="4" fill={C.black} />
+              <ellipse cx={132} cy={86} rx="3.5" ry="4" fill={C.black} />
+              <circle cx={109} cy={85} r="1.2" fill="white" />
+              <circle cx={133} cy={85} r="1.2" fill="white" />
+              <path d="M110 98 Q120 102 130 98" stroke={C.skinShadow} strokeWidth="1.2" fill="none" strokeLinecap="round" />
+            </>
+          )}
+          {(facing === 'left' || facing === 'right') && (
+            <>
+              <ellipse cx={facing === 'left' ? 104 : 136} cy={88} rx="3" ry="3.5" fill={C.black} />
+              <path d={profileNose} fill={C.skinShadow} opacity="0.35" />
+            </>
+          )}
         </>
       )}
-      <path d="M66 72 Q90 58 114 72 L112 82 Q90 76 68 82 Z" fill={`url(#cap-${uid})`} stroke={NPU.black} strokeWidth="0.6" />
-      <ellipse cx="90" cy="72" rx="26" ry="8" fill={`url(#cap-${uid})`} />
-      <rect x="62" y="78" width="56" height="7" rx="2" fill={NPU.black} opacity="0.75" />
-      {facing !== 'back' && <NpuCockade cx={90} cy={66} uid={uid} />}
+
+      {/* Кашкет НПУ */}
+      {facing === 'front' && (
+        <>
+          <path d="M88 68 Q120 48 152 68 L150 82 Q120 74 90 82 Z" fill={`url(#cap-${uid})`} stroke={C.black} strokeWidth="0.8" />
+          <ellipse cx={120} cy={66} rx="32" ry="10" fill={`url(#cap-${uid})`} />
+          <rect x="86" y="78" width="68" height="8" rx="2" fill={C.black} opacity="0.85" />
+          <NpuCockade cx={120} cy={58} uid={uid} />
+        </>
+      )}
+      {facing === 'back' && (
+        <>
+          <path d="M88 68 Q120 48 152 68 L150 82 Q120 74 90 82 Z" fill={`url(#cap-${uid})`} stroke={C.black} strokeWidth="0.8" />
+          <ellipse cx={120} cy={66} rx="32" ry="10" fill={`url(#cap-${uid})`} />
+          <rect x="86" y="78" width="68" height="8" rx="2" fill={C.black} opacity="0.85" />
+          <rect x="108" y="54" width="24" height="10" rx="2" fill={C.navyMid} stroke={C.gold} strokeWidth="0.6" />
+        </>
+      )}
+      {(facing === 'left' || facing === 'right') && (
+        <>
+          <path
+            d={
+              facing === 'left'
+                ? 'M96 62 Q118 50 138 66 L136 80 Q118 72 98 78 Z'
+                : 'M102 66 Q124 50 144 62 L142 78 Q124 74 104 80 Z'
+            }
+            fill={`url(#cap-${uid})`}
+            stroke={C.black}
+            strokeWidth="0.8"
+          />
+          <NpuCockade cx={facing === 'left' ? 118 : 122} cy={58} uid={uid} />
+        </>
+      )}
+
+      {/* Плечі — чітка лінія для ракурсу */}
+      <path
+        d={
+          facing === 'front'
+            ? 'M62 118 Q120 108 178 118'
+            : facing === 'back'
+              ? 'M62 118 Q120 108 178 118'
+              : facing === 'left'
+                ? 'M88 118 Q118 112 152 118'
+                : 'M88 118 Q118 112 152 118'
+        }
+        fill="none"
+        stroke={C.navyLight}
+        strokeWidth="3"
+        opacity="0.5"
+      />
     </g>
   );
 }
 
-function Arms({
+/** Жести з чіткими кутами ліктів (навчальний плакат) */
+function OfficerArms({
   gesture,
   facing,
   uid,
 }: {
   gesture: RegulatorGestureId;
-  facing: 'front' | 'back' | 'left' | 'right';
+  facing: Facing;
   uid: string;
 }) {
-  const armFill = `url(#uni-${uid})`;
+  const fill = `url(#uni-${uid})`;
+  const ls: Point = facing === 'left' ? { x: 92, y: 122 } : facing === 'right' ? { x: 148, y: 122 } : { x: 62, y: 122 };
+  const rs: Point = facing === 'left' ? { x: 148, y: 122 } : facing === 'right' ? { x: 92, y: 122 } : { x: 178, y: 122 };
 
   if (gesture === 'stop') {
-    if (facing === 'front' || facing === 'back') {
-      return (
-        <g>
-          <path d="M52 112 Q38 78 32 48 Q38 42 48 46 Q54 88 58 112 Z" fill={armFill} stroke={NPU.black} strokeWidth="0.5" />
-          <circle cx="34" cy="44" r="9" fill={NPU.skin} stroke={NPU.skinShadow} strokeWidth="0.5" />
-          <path d="M128 112 Q142 78 148 48 Q142 42 132 46 Q126 88 122 112 Z" fill={armFill} stroke={NPU.black} strokeWidth="0.5" />
-          <circle cx="146" cy="44" r="9" fill={NPU.skin} stroke={NPU.skinShadow} strokeWidth="0.5" />
-        </g>
-      );
-    }
+    const lElbow: Point = facing === 'front' || facing === 'back' ? { x: ls.x - 8, y: 72 } : { x: ls.x, y: 68 };
+    const lWrist: Point = facing === 'front' || facing === 'back' ? { x: ls.x - 4, y: 38 } : { x: ls.x + (facing === 'left' ? -4 : 4), y: 36 };
+    const rElbow: Point = facing === 'front' || facing === 'back' ? { x: rs.x + 8, y: 72 } : { x: rs.x, y: 68 };
+    const rWrist: Point = facing === 'front' || facing === 'back' ? { x: rs.x + 4, y: 38 } : { x: rs.x + (facing === 'right' ? 4 : -4), y: 36 };
+
     return (
       <g>
-        <path d="M82 108 Q84 60 90 36 Q98 36 100 108 Z" fill={armFill} stroke={NPU.black} strokeWidth="0.5" />
-        <circle cx="90" cy="32" r="8" fill={NPU.skin} />
+        <LimbSegment from={ls} mid={lElbow} to={lWrist} widthUpper={13} widthLower={11} fill={fill} />
+        <LimbSegment from={rs} mid={rElbow} to={rWrist} widthUpper={13} widthLower={11} fill={fill} />
+        <WhiteGlove cx={lWrist.x} cy={lWrist.y - 6} angle={-10} size={11} />
+        <WhiteGlove cx={rWrist.x} cy={rWrist.y - 6} angle={10} size={11} />
       </g>
     );
   }
 
   if (gesture === 'arms-out') {
+    const lElbow: Point = { x: 28, y: 128 };
+    const lWrist: Point = { x: 8, y: 128 };
+    const rElbow: Point = { x: 212, y: 128 };
+    const rWrist: Point = { x: 232, y: 128 };
+
     return (
       <g>
-        <path d="M48 118 Q20 118 6 128 Q4 134 10 136 Q28 130 52 126 Z" fill={armFill} stroke={NPU.black} strokeWidth="0.5" />
-        <circle cx="6" cy="130" r="8" fill={NPU.skin} />
-        <path d="M132 118 Q160 118 174 128 Q176 134 170 136 Q152 130 128 126 Z" fill={armFill} stroke={NPU.black} strokeWidth="0.5" />
-        <circle cx="174" cy="130" r="8" fill={NPU.skin} />
-        <NeonBaton x={168} y={108} angle={-10} uid={uid} />
+        <LimbSegment from={ls} mid={lElbow} to={lWrist} widthUpper={13} widthLower={11} fill={fill} />
+        <LimbSegment from={rs} mid={rElbow} to={rWrist} widthUpper={13} widthLower={11} fill={fill} />
+        <WhiteGlove cx={lWrist.x} cy={lWrist.y} angle={-90} size={10} />
+        <WhiteGlove cx={rWrist.x} cy={rWrist.y} angle={90} size={10} />
+        <ReflectiveBaton x={208} y={148} angle={75} uid={uid} />
       </g>
     );
   }
 
-  if (gesture === 'arm-forward') {
-    if (facing === 'back') {
-      return (
-        <g>
-          <path d="M58 118 Q52 148 54 172 Q62 174 66 148 Q64 118 60 112 Z" fill={armFill} />
-          <path d="M122 118 Q128 148 126 172 Q118 174 114 148 Q116 118 120 112 Z" fill={armFill} />
-        </g>
-      );
-    }
-    return (
-      <g>
-        <path d="M58 118 Q52 148 54 172 Q62 174 66 148 Q64 118 60 112 Z" fill={armFill} stroke={NPU.black} strokeWidth="0.5" />
-        <circle cx="56" cy="174" r="7" fill={NPU.skin} />
-        {(facing === 'front' || facing === 'right') && (
-          <>
-            <path d="M118 122 Q148 118 168 126 Q172 132 166 134 Q140 128 120 128 Z" fill={armFill} stroke={NPU.black} strokeWidth="0.5" />
-            <circle cx="168" cy="128" r="8" fill={NPU.skin} />
-            <NeonBaton x={162} y={108} angle={6} uid={uid} />
-          </>
-        )}
-        {facing === 'left' && (
-          <>
-            <path d="M118 124 Q148 128 166 132 Q170 128 164 124 Q138 120 120 122 Z" fill={armFill} />
-            <circle cx="166" cy="128" r="7" fill={NPU.skin} />
-            <NeonBaton x={160} y={110} angle={4} uid={uid} />
-          </>
-        )}
-      </g>
-    );
-  }
+  // arm-forward — права рука вперед (дозволений напрямок), ліва опущена
+  const lElbow: Point = { x: ls.x - 6, y: 168 };
+  const lWrist: Point = { x: ls.x - 2, y: 208 };
+  const rElbow: Point =
+    facing === 'back' ? { x: rs.x + 6, y: 168 } : facing === 'left' ? { x: rs.x + 24, y: 132 } : { x: rs.x + 38, y: 128 };
+  const rWrist: Point =
+    facing === 'back'
+      ? { x: rs.x + 2, y: 208 }
+      : facing === 'left'
+        ? { x: rs.x + 52, y: 128 }
+        : facing === 'right'
+          ? { x: rs.x + 48, y: 124 }
+          : { x: rs.x + 58, y: 122 };
 
-  return null;
+  return (
+    <g>
+      <LimbSegment from={ls} mid={lElbow} to={lWrist} widthUpper={13} widthLower={11} fill={fill} />
+      <WhiteGlove cx={lWrist.x} cy={lWrist.y} size={9} />
+      {facing !== 'back' && (
+        <>
+          <LimbSegment from={rs} mid={rElbow} to={rWrist} widthUpper={13} widthLower={11} fill={fill} />
+          <WhiteGlove cx={rWrist.x} cy={rWrist.y} angle={facing === 'left' ? 0 : -8} size={10} />
+          <ReflectiveBaton x={rWrist.x - 8} y={rWrist.y - 18} angle={facing === 'left' ? 8 : 12} uid={uid} />
+        </>
+      )}
+      {facing === 'back' && (
+        <LimbSegment from={rs} mid={rElbow} to={rWrist} widthUpper={13} widthLower={11} fill={fill} />
+      )}
+    </g>
+  );
+}
+
+function OrientationCue({ facing }: { facing: Facing }) {
+  const labels: Record<Facing, { text: string; arrow: string }> = {
+    front: { text: 'ГРУДИ', arrow: 'M120 248 L120 268 M120 248 L112 260 M120 248 L128 260' },
+    back: { text: 'СПИНА', arrow: 'M120 52 L120 32 M120 52 L112 40 M120 52 L128 40' },
+    left: { text: 'ЛІВИЙ БІК', arrow: 'M52 120 L32 120 M52 120 L40 112 M52 120 L40 128' },
+    right: { text: 'ПРАВИЙ БІК', arrow: 'M188 120 L208 120 M188 120 L200 112 M188 120 L200 128' },
+  };
+  const { text, arrow } = labels[facing];
+
+  return (
+    <g>
+      <rect x="8" y="8" width="88" height="26" rx="8" fill={C.navyMid} opacity="0.94" />
+      <text x="52" y="25" fontSize="10" textAnchor="middle" fill="white" fontWeight="bold" fontFamily="system-ui,sans-serif">
+        {text}
+      </text>
+      <path d={arrow} stroke="#38bdf8" strokeWidth="2.5" fill="none" strokeLinecap="round" strokeLinejoin="round" opacity="0.85" />
+    </g>
+  );
 }
 
 export function PoliceOfficerSvg({ gesture, viewSide, className = '' }: PoliceOfficerSvgProps) {
   const uid = useId().replace(/:/g, '');
-  const facing: 'front' | 'back' | 'left' | 'right' =
+  const facing: Facing =
     viewSide === 'chest' ? 'front' : viewSide === 'back' ? 'back' : viewSide === 'left' ? 'left' : 'right';
 
-  const sideLabel =
-    viewSide === 'chest' ? 'ГРУДИ' : viewSide === 'back' ? 'СПИНА' : viewSide === 'left' ? 'ЛІВО' : 'ПРАВО';
-
   return (
-    <svg viewBox="0 0 180 248" className={className} role="img" aria-label="Регулювальник НПУ">
+    <svg viewBox="0 0 240 340" className={className} role="img" aria-label="Регулювальник НПУ">
       <OfficerDefs uid={uid} />
-      <ellipse cx="90" cy="238" rx="42" ry="6" fill="#000" opacity="0.1" />
-      <g filter={`url(#soft-${uid})`}>
-        <Legs uid={uid} />
-        <Torso facing={facing} uid={uid} />
-        <Arms gesture={gesture} facing={facing} uid={uid} />
-        <Head facing={facing} uid={uid} />
+      <rect x="0" y="0" width="240" height="340" fill="#f1f5f9" rx="12" />
+      <ellipse cx="120" cy="332" rx="48" ry="7" fill="#000" opacity="0.12" />
+      <g filter={`url(#shadow-${uid})`}>
+        <OfficerLegs facing={facing} uid={uid} />
+        <OfficerTorso facing={facing} uid={uid} />
+        <OfficerArms gesture={gesture} facing={facing} uid={uid} />
+        <OfficerHead facing={facing} uid={uid} />
       </g>
-      <rect x="6" y="6" width="62" height="20" rx="6" fill={NPU.navyMid} opacity="0.92" />
-      <text x="37" y="19" fontSize="8.5" textAnchor="middle" fill="white" fontWeight="bold" fontFamily="system-ui,sans-serif">
-        {sideLabel}
-      </text>
+      <OrientationCue facing={facing} />
     </svg>
   );
 }
@@ -423,8 +570,8 @@ export function ApproachDiagram({ approach, className = '' }: ApproachDiagramPro
         ))}
       </g>
 
-      <circle cx="100" cy="100" r="16" fill={VEST_ORANGE} stroke={NPU.navy} strokeWidth="2.5" />
-      <circle cx="100" cy="100" r="7" fill={NPU.navyMid} />
+      <circle cx="100" cy="100" r="16" fill={VEST_ORANGE} stroke={C.navy} strokeWidth="2.5" />
+      <circle cx="100" cy="100" r="7" fill={C.navyMid} />
       <polygon
         points={
           approach.side === 'chest'
@@ -435,7 +582,7 @@ export function ApproachDiagram({ approach, className = '' }: ApproachDiagramPro
                 ? '82,100 96,92 96,108'
                 : '118,100 104,92 104,108'
         }
-        fill={NPU.stripe}
+        fill={C.stripe}
       />
 
       {arrows.map(({ x1, y1, x2, y2, move }) => (

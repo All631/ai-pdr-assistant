@@ -1,12 +1,12 @@
 {
-  "generatedAt": "2026-06-16T10:38:35.055Z",
+  "generatedAt": "2026-06-16T11:15:36.602Z",
   "source": "Wikimedia Commons (UA road signs, DSTU 4100)",
   "requestDelayMs": 2000,
   "patterns": [
     "3.29 speed: UA road sign 3.29-{NNN}.svg (3-digit pad)",
-    "3.27 min speed: UA road sign 3.27-{NNN}.svg",
+    "4.16 min speed: UA road sign 4.16-{NNN}.svg",
     "1.13/1.14 grade: UA road sign 1.13.svg or 1.13-{pct}.svg",
-    "Sub-variants: 1.23.1, 1.31.1, 4.1.2-1, 5.38-1, 6.4-1"
+    "Sub-variants: 1.23.1, 4.1.2-1, 5.29.1, 5.38.1, 6.7.1"
   ],
   "signs": [
     {
@@ -127,6 +127,15 @@
       "cached": true
     },
     {
+      "id": "give-way",
+      "code": "2.1",
+      "category": "priority",
+      "file": "2_1.svg",
+      "assetId": "2_1",
+      "ok": true,
+      "cached": true
+    },
+    {
       "id": "stop",
       "code": "2.2",
       "category": "priority",
@@ -136,29 +145,20 @@
       "cached": true
     },
     {
-      "id": "give-way",
-      "code": "2.4",
-      "category": "priority",
-      "file": "2_4.svg",
-      "assetId": "2_4",
-      "ok": true,
-      "cached": true
-    },
-    {
       "id": "main-road",
-      "code": "2.1",
+      "code": "2.3",
       "category": "priority",
-      "file": "2_1.svg",
-      "assetId": "2_1",
+      "file": "2_3.svg",
+      "assetId": "2_3",
       "ok": true,
       "cached": true
     },
     {
       "id": "end-main-road",
-      "code": "2.2",
+      "code": "2.4",
       "category": "priority",
-      "file": "2_24.svg",
-      "assetId": "2_24",
+      "file": "2_4.svg",
+      "assetId": "2_4",
       "ok": true,
       "cached": true
     },
@@ -172,13 +172,14 @@
       "cached": true
     },
     {
-      "id": "priority-intersection",
-      "code": "2.3",
+      "id": "priority-before-oncoming",
+      "code": "2.6",
       "category": "priority",
-      "file": "2_3.svg",
-      "assetId": "2_3",
-      "ok": true,
-      "cached": true
+      "file": "2_6.svg",
+      "assetId": "2_6",
+      "wikiName": "UA road sign 2.6.svg",
+      "source": "pattern",
+      "ok": true
     },
     {
       "id": "no-entry",
@@ -249,7 +250,8 @@
       "category": "prohibitory",
       "file": "3_29_90.svg",
       "assetId": "3_29_90",
-      "ok": false
+      "ok": true,
+      "cached": true
     },
     {
       "id": "no-parking",
@@ -284,7 +286,8 @@
       "category": "mandatory",
       "file": "4_1_1.svg",
       "assetId": "4_1_1",
-      "ok": false
+      "ok": true,
+      "cached": true
     },
     {
       "id": "turn-right",
@@ -292,7 +295,8 @@
       "category": "mandatory",
       "file": "4_1_2.svg",
       "assetId": "4_1_2",
-      "ok": false
+      "ok": true,
+      "cached": true
     },
     {
       "id": "turn-left",
@@ -300,7 +304,8 @@
       "category": "mandatory",
       "file": "4_1_2_1.svg",
       "assetId": "4_1_2_1",
-      "ok": false
+      "ok": true,
+      "cached": true
     },
     {
       "id": "roundabout-mandatory",
@@ -317,45 +322,36 @@
       "category": "mandatory",
       "file": "4_4_1.svg",
       "assetId": "4_4_1",
-      "wikiName": "UA road sign 4.4.svg",
-      "source": "pattern",
-      "ok": true
-    },
-    {
-      "id": "bus-lane",
-      "code": "5.14",
-      "category": "mandatory",
-      "file": "5_14.svg",
-      "assetId": "5_14",
       "ok": true,
       "cached": true
     },
     {
       "id": "min-speed-40",
-      "code": "3.27",
+      "code": "4.16",
       "category": "mandatory",
-      "file": "3_27_40.svg",
-      "assetId": "3_27_40",
+      "file": "4_16_40.svg",
+      "assetId": "4_16_40",
       "ok": true,
       "cached": true
     },
     {
       "id": "parking",
-      "code": "6.4",
+      "code": "5.38.1",
       "category": "info",
-      "file": "6_4.svg",
-      "assetId": "6_4",
+      "file": "5_38_1.svg",
+      "assetId": "5_38_1",
       "ok": true,
       "cached": true
     },
     {
       "id": "direction",
-      "code": "5.7",
+      "code": "5.53.1",
       "category": "info",
-      "file": "5_7.svg",
-      "assetId": "5_7",
-      "ok": true,
-      "cached": true
+      "file": "5_53_1.svg",
+      "assetId": "5_53_1",
+      "wikiName": "UA road sign 5.53.svg",
+      "source": "pattern",
+      "ok": true
     },
     {
       "id": "one-way",
@@ -368,30 +364,31 @@
     },
     {
       "id": "dead-end",
-      "code": "5.6",
+      "code": "5.29.1",
       "category": "info",
-      "file": "5_6.svg",
-      "assetId": "5_6",
-      "ok": true,
-      "cached": true
+      "file": "5_29_1.svg",
+      "assetId": "5_29_1",
+      "ok": false
     },
     {
       "id": "pedestrian-zone",
-      "code": "5.38",
+      "code": "5.33",
       "category": "info",
-      "file": "5_38.svg",
-      "assetId": "5_38",
-      "ok": true,
-      "cached": true
+      "file": "5_33.svg",
+      "assetId": "5_33",
+      "wikiName": "UA road sign 5.33.svg",
+      "source": "pattern",
+      "ok": true
     },
     {
       "id": "living-zone",
-      "code": "5.38",
+      "code": "5.31",
       "category": "info",
-      "file": "5_38_1.svg",
-      "assetId": "5_38_1",
-      "ok": true,
-      "cached": true
+      "file": "5_31.svg",
+      "assetId": "5_31",
+      "wikiName": "UA road sign 5.31.3.svg",
+      "source": "search",
+      "ok": true
     },
     {
       "id": "motorway",
@@ -403,58 +400,14 @@
       "cached": true
     },
     {
-      "id": "hospital",
-      "code": "5.29",
-      "category": "service",
-      "file": "5_29.svg",
-      "assetId": "5_29",
-      "ok": true,
-      "cached": true
-    },
-    {
-      "id": "gas-station",
-      "code": "5.15",
-      "category": "service",
-      "file": "5_15.svg",
-      "assetId": "5_15",
-      "wikiName": "UA road sign 5.15.svg",
+      "id": "bus-lane",
+      "code": "5.11",
+      "category": "info",
+      "file": "5_11.svg",
+      "assetId": "5_11",
+      "wikiName": "UA road sign 5.11.svg",
       "source": "pattern",
       "ok": true
-    },
-    {
-      "id": "rest-area",
-      "code": "5.26",
-      "category": "service",
-      "file": "5_26.svg",
-      "assetId": "5_26",
-      "ok": true,
-      "cached": true
-    },
-    {
-      "id": "hotel",
-      "code": "6.2",
-      "category": "service",
-      "file": "6_2.svg",
-      "assetId": "6_2",
-      "ok": false
-    },
-    {
-      "id": "food",
-      "code": "6.4",
-      "category": "service",
-      "file": "6_4_1.svg",
-      "assetId": "6_4_1",
-      "ok": true,
-      "cached": true
-    },
-    {
-      "id": "telephone",
-      "code": "6.6",
-      "category": "service",
-      "file": "6_6.svg",
-      "assetId": "6_6",
-      "ok": true,
-      "cached": true
     },
     {
       "id": "first-aid",
@@ -466,14 +419,65 @@
       "cached": true
     },
     {
+      "id": "hospital",
+      "code": "6.2",
+      "category": "service",
+      "file": "6_2.svg",
+      "assetId": "6_2",
+      "ok": true,
+      "cached": true
+    },
+    {
       "id": "car-service",
+      "code": "6.5",
+      "category": "service",
+      "file": "6_5.svg",
+      "assetId": "6_5",
+      "ok": true,
+      "cached": true
+    },
+    {
+      "id": "telephone",
       "code": "6.8",
       "category": "service",
       "file": "6_8.svg",
       "assetId": "6_8",
-      "wikiName": "UA road sign 6.8.svg",
+      "ok": true,
+      "cached": true
+    },
+    {
+      "id": "gas-station",
+      "code": "6.7.1",
+      "category": "service",
+      "file": "6_7_1.svg",
+      "assetId": "6_7_1",
+      "wikiName": "UA road sign 6.7.2.svg",
       "source": "pattern",
       "ok": true
+    },
+    {
+      "id": "food",
+      "code": "6.13",
+      "category": "service",
+      "file": "6_13.svg",
+      "assetId": "6_13",
+      "ok": false
+    },
+    {
+      "id": "rest-area",
+      "code": "6.15",
+      "category": "service",
+      "file": "6_15.svg",
+      "assetId": "6_15",
+      "ok": false
+    },
+    {
+      "id": "hotel",
+      "code": "6.16",
+      "category": "service",
+      "file": "6_16.svg",
+      "assetId": "6_16",
+      "ok": false
     },
     {
       "id": "sign-plate",
@@ -481,7 +485,8 @@
       "category": "service",
       "file": "8_1_1.svg",
       "assetId": "8_1_1",
-      "ok": false
+      "ok": true,
+      "cached": true
     }
   ]
 }

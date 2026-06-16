@@ -76,9 +76,9 @@ function titleMatchesEntry(title, entry) {
     const pad3 = String(speed).padStart(3, '0');
     return base === `3.29-${pad3}` || base === `3.29-${speed}`;
   }
-  if (entry.code === '3.27' && speed) {
+  if (entry.code === '4.16' && speed) {
     const pad3 = String(speed).padStart(3, '0');
-    return base === `3.27-${pad3}` || base === '3.27';
+    return base === `4.16-${pad3}` || base === '4.16';
   }
 
   if (entry.code.startsWith('4.1') || entry.code.startsWith('8.1')) {
@@ -151,6 +151,8 @@ function auditCatalog(catalog) {
   return { missing, present };
 }
 
+const REFRESH = process.argv.includes('--refresh');
+
 async function main() {
   const catalogContent = fs.readFileSync(CATALOG_PATH, 'utf8');
   const catalog = parseCatalog(catalogContent);
@@ -174,9 +176,9 @@ async function main() {
     requestDelayMs: REQUEST_DELAY_MS,
     patterns: [
       '3.29 speed: UA road sign 3.29-{NNN}.svg (3-digit pad)',
-      '3.27 min speed: UA road sign 3.27-{NNN}.svg',
+      '4.16 min speed: UA road sign 4.16-{NNN}.svg',
       '1.13/1.14 grade: UA road sign 1.13.svg or 1.13-{pct}.svg',
-      'Sub-variants: 1.23.1, 1.31.1, 4.1.2-1, 5.38-1, 6.4-1',
+      'Sub-variants: 1.23.1, 4.1.2-1, 5.29.1, 5.38.1, 6.7.1',
     ],
     signs: [],
   };
@@ -193,7 +195,7 @@ async function main() {
     const dest = path.join(OUT_DIR, fileName);
     process.stdout.write(`  ${entry.id} (${entry.code}) -> ${fileName} … `);
 
-    if (isValidSvgFile(dest)) {
+    if (isValidSvgFile(dest) && !REFRESH) {
       console.log('SKIP (exists)');
       skipped++;
       manifest.signs.push({

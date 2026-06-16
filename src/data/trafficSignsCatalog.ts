@@ -23,8 +23,9 @@ export const SIGN_CATEGORIES: { id: SignCategoryId; label: string; hint: string 
   { id: 'service', label: 'Знаки сервісу та таблички', hint: 'Послуги, таблички · ДСТУ 2.3.2' },
 ];
 
+/** Каталог узгоджено з ДСТУ 4100:2021 та додатком 1 ПДР України */
 export const TRAFFIC_SIGN_CATALOG: SignCatalogEntry[] = [
-  // Попереджувальні (12)
+  // Попереджувальні (13)
   { id: 'dangerous-turn', code: '1.12', name: 'Небезпечний поворот', description: 'Попереджає про різкий поворот дороги.', category: 'warning' },
   { id: 'crossroads', code: '1.30', name: 'Перехрестя', description: 'Наближення до перехрестя рівнозначних доріг.', category: 'warning' },
   { id: 'general-danger', code: '1.33', name: 'Небезпека', description: 'Загальне попередження про небезпеку.', category: 'warning' },
@@ -39,15 +40,15 @@ export const TRAFFIC_SIGN_CATALOG: SignCatalogEntry[] = [
   { id: 'railway', code: '1.31', name: 'Залізничний переїзд', description: 'Наближення до залізничного переїзду.', category: 'warning' },
   { id: 'tunnel', code: '1.32', name: 'Тунель', description: 'Попередження про тунель попереду.', category: 'warning' },
 
-  // Пріоритет (6)
+  // Пріоритет (6) — ДСТУ 4100:2021, група 2
+  { id: 'give-way', code: '2.1', name: 'Дати дорогу', description: 'Поступитися транспорту на головній дорозі або за табличкою 7.8.', category: 'priority' },
   { id: 'stop', code: '2.2', name: 'STOP', description: 'Повна зупинка перед стоп-лінією або краєм проїзної частини.', category: 'priority' },
-  { id: 'give-way', code: '2.4', name: 'Дати дорогу', description: 'Поступитися транспорту на перехресті.', category: 'priority' },
-  { id: 'main-road', code: '2.1', name: 'Головна дорога', description: 'Ви рухаєтесь головною дорогою.', category: 'priority' },
-  { id: 'end-main-road', code: '2.2', name: 'Кінець головної', description: 'Закінчення пріоритету головної дороги.', category: 'priority' },
-  { id: 'give-way-oncoming', code: '2.5', name: 'Поступись зустрічному', description: 'Вузька ділянка — дати дорогу зустрічному.', category: 'priority' },
-  { id: 'priority-intersection', code: '2.3', name: 'Перехрестя з головною', description: 'Головна дорога перетинає ваш шлях.', category: 'priority' },
+  { id: 'main-road', code: '2.3', name: 'Головна дорога', description: 'Перевага проїзду нерегульованих перехресть.', category: 'priority' },
+  { id: 'end-main-road', code: '2.4', name: 'Кінець головної', description: 'Скасування пріоритету головної дороги.', category: 'priority' },
+  { id: 'give-way-oncoming', code: '2.5', name: 'Перевага зустрічного', description: 'Вузька ділянка — дати дорогу зустрічному транспорту.', category: 'priority' },
+  { id: 'priority-before-oncoming', code: '2.6', name: 'Перевага перед зустрічним', description: 'Вузька ділянка — перевага перед зустрічними ТЗ.', category: 'priority' },
 
-  // Заборонні (10)
+  // Заборонні (11)
   { id: 'no-entry', code: '3.1', name: "В'їзд заборонено", description: "Заборона в'їзду всіх ТЗ.", category: 'prohibitory' },
   { id: 'no-overtaking', code: '3.20', name: 'Обгін заборонено', description: 'Заборона обгону транспортних засобів.', category: 'prohibitory' },
   { id: 'no-left', code: '3.18', name: 'Поворот ліворуч заборонено', description: 'Заборона повороту ліворуч.', category: 'prohibitory' },
@@ -60,33 +61,33 @@ export const TRAFFIC_SIGN_CATALOG: SignCatalogEntry[] = [
   { id: 'no-stopping', code: '3.33', name: 'Зупинка заборонена', description: 'Заборона зупинки та стоянки.', category: 'prohibitory' },
   { id: 'no-horns', code: '3.32', name: 'Сигнали заборонено', description: 'Заборона звукових сигналів.', category: 'prohibitory' },
 
-  // Наказові (7)
+  // Наказові (6)
   { id: 'straight', code: '4.1.1', name: 'Рух прямо', description: 'Дозволено лише прямий рух.', category: 'mandatory' },
   { id: 'turn-right', code: '4.1.2', name: 'Поворот праворуч', description: 'Дозволено поворот праворуч.', category: 'mandatory' },
-  { id: 'turn-left', code: '4.1.2', name: 'Поворот ліворуч', description: 'Дозволено поворот ліворуч.', category: 'mandatory' },
+  { id: 'turn-left', code: '4.1.2', name: 'Поворот ліворуч', description: 'Дозволено поворот ліворuch.', category: 'mandatory' },
   { id: 'roundabout-mandatory', code: '4.3', name: 'Круговий рух', description: 'Обов\'язковий рух у напрямку стрілок.', category: 'mandatory' },
   { id: 'bicycle-lane', code: '4.4.1', name: 'Велосипедна доріжка', description: 'Доріжка для велосипедистів.', category: 'mandatory' },
-  { id: 'bus-lane', code: '5.14', name: 'Смуга автобусів', description: 'Виділена смуга для маршрутних ТЗ.', category: 'mandatory' },
-  { id: 'min-speed-40', code: '3.27', name: 'Мін. 40 км/год', description: 'Мінімально дозволена швидкість.', category: 'mandatory' },
+  { id: 'min-speed-40', code: '4.16', name: 'Мін. 40 км/год', description: 'Мінімально дозволена швидкість руху.', category: 'mandatory' },
 
-  // Інформаційні (7)
-  { id: 'parking', code: '6.4', name: 'Парковка', description: 'Місце для стоянки ТЗ.', category: 'info' },
-  { id: 'direction', code: '5.7', name: 'Напрямок руху', description: 'Вказує дозволений напрямок.', category: 'info' },
+  // Інформаційні (8)
+  { id: 'parking', code: '5.38.1', name: 'Місце для стоянки', description: 'Позначає майданчик або місце для стоянки ТЗ.', category: 'info' },
+  { id: 'direction', code: '5.53.1', name: 'Покажчик напрямку', description: 'Напрямок руху до населених пунктів або об\'єктів.', category: 'info' },
   { id: 'one-way', code: '5.5', name: 'Односторонній рух', description: 'Рух у одному напрямку.', category: 'info' },
-  { id: 'dead-end', code: '5.6', name: 'Тупик', description: 'Дорога не має крізного проїзду.', category: 'info' },
-  { id: 'pedestrian-zone', code: '5.38', name: 'Пішохідна зона', description: 'Перевага пішоходів.', category: 'info' },
-  { id: 'living-zone', code: '5.38', name: 'Житлова зона', description: 'Житлова або пішохідна зона, обмеження 20 км/год.', category: 'info' },
+  { id: 'dead-end', code: '5.29.1', name: 'Тупик', description: 'Дорога без наскрізного проїзду.', category: 'info' },
+  { id: 'pedestrian-zone', code: '5.33', name: 'Пішохідна зона', description: 'Особливі умови руху з перевагою пішоходів.', category: 'info' },
+  { id: 'living-zone', code: '5.31', name: 'Житлова зона', description: 'Житлова зона, обмеження 20 км/год.', category: 'info' },
   { id: 'motorway', code: '5.1', name: 'Автомагістраль', description: 'Початок автомагістралі.', category: 'info' },
+  { id: 'bus-lane', code: '5.11', name: 'Смуга маршрутних ТЗ', description: 'Початок смуги для автобусів, трамваїв та велосипедистів.', category: 'info' },
 
-  // Сервісу (8)
-  { id: 'hospital', code: '5.29', name: 'Лікарня', description: 'Медичний заклад поблизу.', category: 'service' },
-  { id: 'gas-station', code: '5.15', name: 'АЗС', description: 'Паливна станція.', category: 'service' },
-  { id: 'rest-area', code: '5.26', name: 'Місце відпочинку', description: 'Зона відпочинку для водіїв.', category: 'service' },
-  { id: 'hotel', code: '6.2', name: 'Готель', description: 'Готель або мотель.', category: 'service' },
-  { id: 'food', code: '6.4', name: 'Харчування', description: 'Заклад харчування.', category: 'service' },
-  { id: 'telephone', code: '6.6', name: 'Телефон', description: 'Телефон-автомат або зв\'язок.', category: 'service' },
-  { id: 'first-aid', code: '6.1', name: 'Медична допомога', description: 'Пункт медичної допомоги.', category: 'service' },
-  { id: 'car-service', code: '6.8', name: 'СТО', description: 'Станція технічного обслуговування.', category: 'service' },
+  // Сервісу (9)
+  { id: 'first-aid', code: '6.1', name: 'Перша медична допомога', description: 'Пункт першої медичної допомоги.', category: 'service' },
+  { id: 'hospital', code: '6.2', name: 'Лікарня', description: 'Медичний заклад (лікарня) поблизу.', category: 'service' },
+  { id: 'car-service', code: '6.5', name: 'Технічне обслуговування', description: 'Пункт технічного обслуговування автомобілів.', category: 'service' },
+  { id: 'telephone', code: '6.8', name: 'Телефон', description: 'Телефон-автомат або зв\'язок.', category: 'service' },
+  { id: 'gas-station', code: '6.7.1', name: 'АЗС', description: 'Автозаправна станція.', category: 'service' },
+  { id: 'food', code: '6.13', name: 'Харчування', description: 'Ресторан або їдальня.', category: 'service' },
+  { id: 'rest-area', code: '6.15', name: 'Місце відпочинку', description: 'Зона відпочинку для водіїв.', category: 'service' },
+  { id: 'hotel', code: '6.16', name: 'Готель', description: 'Готель або мотель.', category: 'service' },
   { id: 'sign-plate', code: '8.1.1', name: 'Табличка «200 м»', description: 'Уточнює відстань до об\'єкта або дію знака.', category: 'service' },
 ];
 
